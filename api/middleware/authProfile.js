@@ -17,13 +17,13 @@ const makeProfileObj = (claims) => {
  */
 const authProfile = async (req, res, next) => {
   try {
-    console.log('req.auth0User', req.auth0User);
     if (req.auth0User) {
+      console.log('req.auth0User', req.auth0User);
       const jwtUserObj = makeProfileObj(req.auth0User);
       const profile = await Profiles.findOrCreateProfile(jwtUserObj);
       if (profile) {
         req.profile = profile;
-        console.log('req.profile', profile);
+        console.log('profile', profile);
       } else {
         throw new Error('Unable to process jwt profile');
       }
@@ -42,4 +42,4 @@ const auth0Verify = (req, res, next) => {
   }
 };
 
-module.exports = {auth0Verify, authProfile};
+module.exports = { auth0Verify, authProfile };

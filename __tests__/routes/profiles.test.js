@@ -7,9 +7,12 @@ server.use(express.json());
 
 jest.mock('../../api/profile/profileModel');
 // mock the auth middleware completely
-jest.mock('../../api/middleware/authRequired', () =>
-  jest.fn((req, res, next) => next())
-);
+jest.mock('../../api/middleware/authProfile', () => {
+  return {
+    auth0Verify: jest.fn((req, res, next) => next()),
+    authProfile: jest.fn((req, res, next) => next()),
+  };
+});
 
 describe('profiles router endpoints', () => {
   beforeAll(() => {
