@@ -3,9 +3,9 @@ version: '3'
 services:
   pg:
     image: postgres
-    container_name: pg-api-starter
+    container_name: ss-api-db
     ports:
-      - '5400:5432'
+      - '5430:5432'
     environment:
       - POSTGRES_USER=docker
       - POSTGRES_PASSWORD=docker
@@ -19,7 +19,7 @@ services:
     restart: always
 
   pgadmin:
-    container_name: pgadmin_labs
+    container_name: pgadmin_ss
     image: dpage/pgadmin4
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}

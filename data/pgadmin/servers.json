@@ -5,7 +5,7 @@
         "Group": "Dev",
         "Port": 5432,
         "Username": "docker",
-        "Host": "pg-api-starter",
+        "Host": "ss-api-db",
         "SSLMode": "prefer",
         "MaintenanceDB": "postgres"
     }
