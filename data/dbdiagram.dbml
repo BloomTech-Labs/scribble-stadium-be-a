@@ -1,0 +1,66 @@
+Project scribble_stadium_be_a {
+  database_type: 'PostgreSQL'
+  Note: 'Scribble Stadium BE'
+}
+
+Table profiles {
+  id uuid [primary key]
+  name varchar
+  email varchar
+  role varchar
+  pin varchar
+  createdAt datetime // with TZ
+}
+
+Table children {
+  id uuid [primary key]
+  parentId varchar [ref: > profiles.id]
+  name varchar
+  pin varchar
+}
+
+Table stories {
+  id uuid [primary key]
+  title varchar
+  description varchar
+  author varchar
+}
+
+Table storyEpisodes {
+  id uuid [primary key]
+  storyId varchar [ref: > stories.id]
+  episodeNum numeric
+  textImgUrl varchar
+  audioUrl varchar
+  content varchar
+}
+
+Table storyEpisodePrompts {
+  id uuid [primary key]
+  episdoeId varchar [ref: > storyEpisodes.id]
+  type varchar // writing or drawing
+  prompt varchar
+}
+
+Table submissions {
+  id uuid [primary key]
+  childId varchar [ref: > children.id]
+  storyId varchar [ref: > stories.id]
+  episodeId varchar [ref: > storyEpisodes.id]
+  approvedAt datetime
+  episodeStartDate datetime
+  finishedReadingAt datetime
+  finishedWritingAt datetime
+  squadCreatedAt datetime
+  votedAt datetime
+}
+
+Table submissionPages {
+  id uuid [primary key]
+  submissionId varchar [ref: > submissions.id]
+  type varchar // writing or drawing
+  url varchar 
+  pageNum numeric
+  createdAt datetime
+  updatedAt datetime
+}
