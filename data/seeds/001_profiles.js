@@ -1,4 +1,4 @@
-const faker = require('faker');
+const { faker } = require('@faker-js/faker');
 
 const profiles = [...new Array(5)].map((i, idx) => ({
   id: idx === 0 ? '614025c94fec6d00682bf2a6' : faker.random.alphaNumeric(20),
