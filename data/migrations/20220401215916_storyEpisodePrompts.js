@@ -1,5 +1,5 @@
 exports.up = function (knex) {
-  return knex.schema.createTable('soryEpisodePropmts', (table) => {
+  return knex.schema.createTable('storyEpisodePrompts', (table) => {
     table.increments('id').primary();
     table.integer('episodeId');
     table.string('type').notNullable();
@@ -9,5 +9,5 @@ exports.up = function (knex) {
 };
 
 exports.down = function (knex) {
-  return knex.schema.dropTableIfExists('soryEpisodePropmts');
-};
+  return knex.schema.dropTableIfExists('storyEpisodePrompts');
+}; 
