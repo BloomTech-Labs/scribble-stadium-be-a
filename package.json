@@ -19,8 +19,10 @@
     "prepare": "husky install"
   },
   "lint-staged": {
-    "*.{js,jsx}": "eslint --fix",
-    "*.{js,jsx,json,css,md}": "prettier --write"
+    "api/**/*.js": [
+      "eslint --fix",
+      "prettier --write"
+    ]
   },
   "husky": {
     "hooks": {
