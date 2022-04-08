@@ -4,6 +4,7 @@ exports.up = function (knex) {
     table.string('title');
     table.string('description');
     table.string('author');
+    table.timestamps(true, true);
   });
 };
 

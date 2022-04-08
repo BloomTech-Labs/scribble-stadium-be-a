@@ -6,6 +6,7 @@ exports.up = function (knex) {
     table.string('textImgUrl');
     table.string('audioUrl');
     table.text('content');
+    table.timestamps(true, true);
   });
 };
 
