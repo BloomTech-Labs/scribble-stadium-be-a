@@ -26,7 +26,7 @@ const adminProfile = {
 
 const profiles = [...fakeProfiles, parentProfile, adminProfile];
 
-console.log(profiles)
+console.log(profiles);
 exports.seed = function (knex) {
   // Deletes ALL existing entries
   return knex('profiles')
