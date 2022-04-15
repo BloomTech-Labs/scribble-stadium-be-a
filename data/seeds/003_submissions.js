@@ -1,17 +1,5 @@
 const { faker } = require('@faker-js/faker');
 
-// const submissions = [...new Array(3)].map((i, idx) => ({
-// id: idx === 0 ? 1 : faker.random.alphaNumeric(),
-//     childId: 1,
-//     storyId: 1,
-//     episodeId: 1,
-//     approvedAt: faker.date.past(),
-//     finishedReadingAt: faker.date.past(),
-//     finishedWritingAt: faker.date.past(),
-//     squadCreatedAt: faker.date.past(),
-//     votedAt: faker.date.past(),
-// }));
-
 const submissions = [
   {
     id: 1,
@@ -19,6 +7,7 @@ const submissions = [
     storyId: 1,
     episodeId: 1,
     approvedAt: faker.date.past(),
+    episodeStartDate: faker.date.past(),
     finishedReadingAt: faker.date.past(),
     finishedWritingAt: faker.date.past(),
     squadCreatedAt: faker.date.past(),
@@ -30,6 +19,7 @@ const submissions = [
     storyId: 2,
     episodeId: 2,
     approvedAt: faker.date.past(),
+    episodeStartDate: faker.date.past(),
     finishedReadingAt: faker.date.past(),
     finishedWritingAt: faker.date.past(),
     squadCreatedAt: faker.date.past(),
@@ -42,6 +32,7 @@ const submissions = [
     storyId: 3,
     episodeId: 3,
     approvedAt: faker.date.past(),
+    episodeStartDate: faker.date.past(),
     finishedReadingAt: faker.date.past(),
     finishedWritingAt: faker.date.past(),
     squadCreatedAt: faker.date.past(),
