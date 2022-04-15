@@ -1,12 +1,5 @@
 const { faker } = require('@faker-js/faker');
 
-// const stories = [...new Array(3)].map((i, idx) => ({
-//   id: idx === 0 ? 1 : faker.random.alphaNumeric(4),
-//   title: faker.lorem.sentence(),
-//   description: faker.lorem.paragraph(),
-//   author: faker.name.firstName(),
-//   created_at: faker.date.past(),
-// }));
 
 const stories = [
   {
