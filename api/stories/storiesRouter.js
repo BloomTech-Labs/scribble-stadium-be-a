@@ -1,16 +1,18 @@
-// const router = require('express').Router();
-// const Plants = require('./plants-model');
-// const { checkId, checkPayload } = require('./plants-middleware');
+const router = require('express').Router();
+const Children = require('./storiesModel');
+//// const { checkId, checkPayload } = require('./plants-middleware');
 
-// // Gets all plant info. = localhost:9000/plants
-// router.get('/', async (req, res) => {
-//     try {
-//         const plants = await Plants.getAll()
-//         res.status(200).json(plants)
-//     } catch (err) {
-//         res.status(500).json({ message: err.message })
-//     }
-// })
+//// Gets all plant info. = localhost:9000/plants
+router.get('/', async (req, res) => {
+  try {
+    const children = await Children.getAll();
+    res.status(200).json(children);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+module.exports = router;
 
 // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@

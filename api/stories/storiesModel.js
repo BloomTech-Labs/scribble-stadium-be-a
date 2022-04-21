@@ -1,12 +1,12 @@
-// const db = require('../../data/db-config') // Database connection // SQLite3 // Knex
+const db = require('../../data/db-config'); // Database connection // SQLite3 // Knex
 
-// module.exports = {
-//     getAll
-// }
+function getAll() {
+  return db('children');
+}
 
-// function getAll() {
-//     return db('plants')
-// }
+module.exports = {
+  getAll,
+};
 
 // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ //
 // @@@@@@@@@@@@@@@@@@       @@@@@@@@@@@@@@@@@@@@@ //

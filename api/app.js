@@ -24,7 +24,9 @@ const swaggerUIOptions = {
 const indexRouter = require('./index/indexRouter');
 const profileRouter = require('./profile/profileRouter');
 const dsRouter = require('./dsService/dsRouter');
-const storyRouter = require('./stories/storiesRouter');
+
+const storiesRouter = require('./stories/storiesRouter');
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 const app = express();
 
@@ -59,7 +61,9 @@ app.use(authMiddleware.authProfile);
 app.use('/', indexRouter);
 app.use(['/profile', '/profiles'], profileRouter);
 app.use('/data', dsRouter);
-app.use(['/storyNew', '/storiesNew', '/story', '/stories'], storyRouter);
+// app.use(['/storyNew', '/storiesNew', '/story', '/stories'], storyRouter);
+app.use('/stories', storiesRouter);
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
