@@ -1,4 +1,24 @@
 // const router = require('express').Router();
+// const Plants = require('./plants-model');
+// const { checkId, checkPayload } = require('./plants-middleware');
+
+// // Gets all plant info. = localhost:9000/plants
+// router.get('/', async (req, res) => {
+//     try {
+//         const plants = await Plants.getAll()
+//         res.status(200).json(plants)
+//     } catch (err) {
+//         res.status(500).json({ message: err.message })
+//     }
+// })
+
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+// @@@@@@@ Old Code Below @@@@@@@@
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+// const router = require('express').Router();
 // const { crudOperationsManager } = require('../../lib');
 // const Stories = require('./storyModel');
 
