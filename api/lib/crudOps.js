@@ -12,6 +12,9 @@ const { send } = require('./errorHandler');
 const getAll = async (res, query, name, ...args) => {
   try {
     const data = await query(...args);
+    if (data.length <= 0) {
+      throw new Error('NotFound');
+    }
     res.status(200).json(data);
   } catch (error) {
     send(res, error, name);
