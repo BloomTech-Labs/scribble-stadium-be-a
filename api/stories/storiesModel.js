@@ -1,12 +1,50 @@
-const db = require('../../data/db-config'); // Database connection // SQLite3 // Knex
+const db = require('../../data/db-config');
 
 function getAll() {
-  return db('children');
+  return db('stories');
+}
+
+function getStoryById(idArg) {
+  return db('stories').where({ id: idArg }).first();
+}
+
+async function add(storyArg) {
+  const [newStory] = await db('stories').insert(storyArg).returning('*');
+  return newStory;
+}
+
+async function updateById(id, storyData) {
+  await db('stories').where({ id: id }).update(storyData);
+  return getStoryById(id);
+}
+
+async function remove(id) {
+  const deletedStory = await db('stories').where({ id: id }).del();
+  return deletedStory;
 }
 
 module.exports = {
   getAll,
+  getStoryById,
+  add,
+  updateById,
+  remove,
 };
+
+// Old labs BE for reference:
+// module.exports = {
+//   add,
+//   getAllStories,
+//   getById,
+//   update,
+//   remove,
+//   getEpisodesByStoryID,
+//   getEpisodeByID,
+//   addEpisode,
+//   removeEpisode,
+//   updateEpisode,
+//   getPromptsByEpisodeID,
+// };
 
 // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ //
 // @@@@@@@@@@@@@@@@@@       @@@@@@@@@@@@@@@@@@@@@ //
