@@ -5,6 +5,15 @@ const { checkId } = require('./storiesMiddleware');
 // Intro to Relational Databases (Gabriel)
 // https://bloomtech-1.wistia.com/medias/cfmhiymcj7
 
+// episodes = chapters
+
+// GET - getAll() - get all episodes (chapters) of story.
+
+// POST - add() - add a chapter to the story.
+
+// Prompts are the writing prompts the children are getting
+// when they are asking write/draw something based on a story
+
 // GET - getAll() - localhost:8000/stories
 router.get('/', async (req, res) => {
   try {
