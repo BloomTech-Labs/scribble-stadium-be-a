@@ -1,23 +1,23 @@
 const router = require('express').Router();
 const Stories = require('./storiesModel');
+const { checkId } = require('./storiesMiddleware');
 
 // Intro to Relational Databases (Gabriel)
 // https://bloomtech-1.wistia.com/medias/cfmhiymcj7
 
-// getAll() - GET - localhost:8000/stories
+// GET - getAll() - localhost:8000/stories
 router.get('/', async (req, res) => {
   try {
     const stories = await Stories.getAll();
-    // console.log('quotes =', stories);
+    console.log('stories =', stories);
     res.status(200).json(stories);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 });
 
-// needs checkId middleware
-// getStoryById() - GET - localhost:8000/stories/1
-router.get('/:id', async (req, res) => {
+// GET - getStoryById() - localhost:8000/stories/1
+router.get('/:id', checkId, async (req, res) => {
   try {
     const story = await Stories.getStoryById(req.params.id);
     res.status(200).json(story);
@@ -26,7 +26,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// add() - POST -localhost:8000/stories
+// POST - add() - localhost:8000/stories
 router.post('/', async (req, res) => {
   try {
     const story = await Stories.add(req.body);
@@ -36,16 +36,14 @@ router.post('/', async (req, res) => {
   }
 });
 
-// needs checkId middleware
-// updateById() - PUT - localhost:8000/stories/1
-router.put('/:id', async (req, res) => {
+// PUT - updateById() - localhost:8000/stories/1
+router.put('/:id', checkId, async (req, res) => {
   const updatedStory = await Stories.updateById(req.params.id, req.body);
   res.status(200).json(updatedStory);
 });
 
-// needs checkId middleware
-// delete() - REMOVE - localhost:8000/stories/1
-router.delete('/:id', async (req, res) => {
+// DELETE - remove() - localhost:8000/stories/1
+router.delete('/:id', checkId, async (req, res) => {
   const id = req.params.id;
   await Stories.remove(id);
   res.status(204).json(`Story id: ${id} has been removed.`);
