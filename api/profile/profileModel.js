@@ -40,6 +40,10 @@ const findOrCreateProfile = async (profileObj) => {
   }
 };
 
+const findChildren = async (id) => {
+  return db('children').where('parentId', id);
+};
+
 module.exports = {
   findAll,
   findBy,
@@ -48,4 +52,5 @@ module.exports = {
   update,
   remove,
   findOrCreateProfile,
+  findChildren,
 };
