@@ -23,15 +23,35 @@ async function remove(id) {
   return deletedStory;
 }
 
-// .join('Stories as s', 'e.StoryID', 's.ID') // for reference
-/**
- * Queries the database to retrieve all episodes for a specific story with given ID
- * @param {number} storyID the ID to search for in the database
- * @returns {Promise} a promise that resolves to story object of the given story ID
- */
-const getEpisodesByStoryID = (storyId) => {
-  return db('storyEpisodes').where({ storyId: storyId }).select('*'); // .first();
-};
+function getEpisodesByStoryID(storyId) {
+  return db('storyEpisodes').where({ storyId: storyId }).select('*');
+}
+
+async function addEpisode(storyArg) {
+  const [newEpisode] = await db('storyEpisodes')
+    .insert(storyArg)
+    .returning('*');
+  return newEpisode;
+}
+
+// /**
+//  * Queries the database for a specific story with given ID
+//  * @param {number} ID the ID to search for in the database
+//  * @returns {Promise} a promise that resolves to story object of the
+//  * given story ID with all episodes and drawing/writing prompts
+//  */
+// const getById = async (ID) => { // rename more specific - with episodes
+//   let story = await db('Stories').where('Stories.ID', ID);
+//   const episodes = await getEpisodesByStoryID(ID);
+
+//   for (let i = 0; i < episodes.length; i++) { // make this forEach // getting prompts from db and adding to each episode from arr
+//     let prompts = await getPromptsByEpisodeID(episodes[i].ID);
+//     episodes[i].WritingPrompt = prompts[0].WritingPrompt;
+//     episodes[i].DrawingPrompt = prompts[0].DrawingPrompt;
+//   }
+//   story.episodes = episodes;
+//   return [story];
+// };
 
 module.exports = {
   getAll,
@@ -40,36 +60,8 @@ module.exports = {
   updateById,
   remove,
   getEpisodesByStoryID,
+  addEpisode,
 };
-
-// const getEpisodesByStoryID = (storyID) => {
-//   return db('Episodes as e')
-//     .join('Stories as s', 'e.StoryID', 's.ID')
-//     .where('s.ID', storyID)
-//     .select(
-//       'e.ID',
-//       'e.StoryID',
-//       'e.EpisodeNumber',
-//       'e.TextURL',
-//       'e.AudioURL',
-//       'e.Content'
-//     );
-// };
-
-// Old labs BE for reference:
-// module.exports = {
-//   add,
-//   getAllStories,
-//   getById,
-//   update,
-//   remove,
-//   getEpisodesByStoryID,
-//   getEpisodeByID,
-//   addEpisode,
-//   removeEpisode,
-//   updateEpisode,
-//   getPromptsByEpisodeID,
-// };
 
 // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ //
 // @@@@@@@@@@@@@@@@@@       @@@@@@@@@@@@@@@@@@@@@ //
@@ -296,10 +288,10 @@ module.exports = {
 // const getById = async (ID) => {
 //   const story = await db('Stories').where('Stories.ID', ID);
 //   const episodes = await getEpisodesByStoryID(ID);
-//   const episodesArray = [];
-//   for (let i = 0; i < episodes.length; i++) {
-//     episodesArray.push(episodes[i]);
-//   }
+//   // const episodesArray = [];
+//   // for (let i = 0; i < episodes.length; i++) {
+//   //   episodesArray.push(episodes[i]);
+//   // }
 //   for (let i = 0; i < episodesArray.length; i++) {
 //     let prompts = await getPromptsByEpisodeID(episodesArray[i].ID);
 //     episodesArray[i].WritingPrompt = prompts[0].WritingPrompt.Prompt;
@@ -406,41 +398,41 @@ module.exports = {
 //  * @returns {Promise} a promise that resolves to the ID of the new episode
 //  */
 // const addEpisode = (episode) => {
-//   return db('Episodes').insert(episode).returning('ID');
-// };
+// //   return db('Episodes').insert(episode).returning('ID');
+// // };
 
-// /**
-//  * Queries the database to update row matching ID with the given changes
-//  * @param {number} episodeID the unique row ID to update
-//  * @param {Object} changes the episode to be added to the database
-//  * @param {string} changes.EpisodeNumber the description of the story
-//  * @param {string} changes.TextURL the author of the story
-//  * @param {string} changes.AudioURL the author of the story
-//  * @returns {Promise} a promise that resolves to the ID of the new story
-//  */
-// const updateEpisode = (episodeID, changes) => {
-//   return db('Episodes as e').where('e.ID', episodeID).update(changes);
-// };
+// // /**
+// //  * Queries the database to update row matching ID with the given changes
+// //  * @param {number} episodeID the unique row ID to update
+// //  * @param {Object} changes the episode to be added to the database
+// //  * @param {string} changes.EpisodeNumber the description of the story
+// //  * @param {string} changes.TextURL the author of the story
+// //  * @param {string} changes.AudioURL the author of the story
+// //  * @returns {Promise} a promise that resolves to the ID of the new story
+// //  */
+// // const updateEpisode = (episodeID, changes) => {
+// //   return db('Episodes as e').where('e.ID', episodeID).update(changes);
+// // };
 
-// /**
-//  * Queries the database to remove a row
-//  * @param {number} episodeID the ID of the row to delete
-//  * @returns {Promise} a promise that resolves to the number of rows deleted
-//  */
-// const removeEpisode = (episodeID) => {
-//   return db('Episodes as e').where('e.ID', episodeID).del();
-// };
+// // /**
+// //  * Queries the database to remove a row
+// //  * @param {number} episodeID the ID of the row to delete
+// //  * @returns {Promise} a promise that resolves to the number of rows deleted
+// //  */
+// // const removeEpisode = (episodeID) => {
+// //   return db('Episodes as e').where('e.ID', episodeID).del();
+// // };
 
-// module.exports = {
-//   add,
-//   getAllStories,
-//   getById,
-//   update,
-//   remove,
-//   getEpisodesByStoryID,
-//   getEpisodeByID,
-//   addEpisode,
-//   removeEpisode,
-//   updateEpisode,
-//   getPromptsByEpisodeID,
-// };
+// // module.exports = {
+// //   add,
+// //   getAllStories,
+// //   getById,
+// //   update,
+// //   remove,
+// //   getEpisodesByStoryID,
+// //   getEpisodeByID,
+// //   addEpisode,
+// //   removeEpisode,
+// //   updateEpisode,
+// //   getPromptsByEpisodeID,
+// // };

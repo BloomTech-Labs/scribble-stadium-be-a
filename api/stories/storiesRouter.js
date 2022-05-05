@@ -1,22 +1,21 @@
 const router = require('express').Router();
 const Stories = require('./storiesModel');
 const { checkId } = require('./storiesMiddleware');
-const { crudOperationsManager } = require('../lib/index');
-
-// Endpoints Ash asked for*
-// GET all episode by story
-// POST to add episode for a story
-// GET storyEpisodePrompt by episode
+// const { crudOperationsManager } = require('../lib/index');
 
 // Intro to Relational Databases (Gabriel)
 // https://bloomtech-1.wistia.com/medias/cfmhiymcj7
 
-// episodes = chapters
-// GET - getAll() - get all episodes (chapters) of story.
+// Endpoints Ash asked for*
+// [x] GET all episode by story
+// [?] POST to add episode for a story
+// [] GET storyEpisodePrompt by episode
 
-// POST - add() - add a chapter to the story.
+// [x] GET - getAll() - get all episodes (chapters) of story.
 
-// Prompts are the writing prompts the children are getting -
+// [?] POST - add() - add a chapter to the story.
+
+// [] Prompts are the writing prompts the children are getting -
 // - when they are asking write/draw something based on a story
 
 // GET - getAll() - localhost:8000/stories
@@ -30,25 +29,26 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.get('/:id', checkId, async (req, res) => {
-  const { id } = req.params;
-  crudOperationsManager.getAll(
-    res,
-    Stories.getStoryById,
-    'Story could not be retrieved because id does not exist',
-    id
-  );
-});
+// // crudOps version.
+// router.get('/:id', checkId, async (req, res) => {
+//   const { id } = req.params;
+//   crudOperationsManager.getAll(
+//     res,
+//     Stories.getStoryById,
+//     'Story could not be retrieved because id does not exist',
+//     id
+//   );
+// });
 
 // GET - getStoryById() - localhost:8000/stories/1
-// router.get('/:id', checkId, async (req, res) => {
-//   try {
-//     const story = await Stories.getStoryById(req.params.id);
-//     res.status(200).json(story);
-//   } catch (err) {
-//     res.status(500).json({ message: err.message });
-//   }
-// });
+router.get('/:id', checkId, async (req, res) => {
+  try {
+    const story = await Stories.getStoryById(req.params.id);
+    res.status(200).json(story);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
 
 // POST - add() - localhost:8000/stories
 router.post('/', async (req, res) => {
@@ -73,7 +73,6 @@ router.delete('/:id', checkId, async (req, res) => {
   res.status(204).json(`Story id: ${id} has been removed.`);
 });
 
-// This returns an arr of obj or objs, rather than just an object like the other endpoints
 router.get('/episodes/:storyId', async (req, res) => {
   try {
     const episodes = await Stories.getEpisodesByStoryID(req.params.storyId);
@@ -82,6 +81,16 @@ router.get('/episodes/:storyId', async (req, res) => {
     else {
       res.status(200).json(episodes);
     }
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// POST - addEpisode() - localhost:8000/stories/episodes
+router.post('/episodes', async (req, res) => {
+  try {
+    const episode = await Stories.addEpisode(req.body);
+    res.status(200).json(episode);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -157,7 +166,7 @@ module.exports = router;
 //   }
 // });
 
-//Work in progress by next cohort to add constraint to EpisodeNumber to be unique per story ID
+// // Work in progress by next cohort to add constraint to EpisodeNumber to be unique per story ID
 // router.post('/episodes', (req, res) => {
 //   // Pull relevant data out of the request object
 //   const { StoryID, EpisodeNumber, TextURL, AudioURL } = req.body;
