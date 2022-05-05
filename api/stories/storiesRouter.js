@@ -73,9 +73,10 @@ router.delete('/:id', checkId, async (req, res) => {
   res.status(204).json(`Story id: ${id} has been removed.`);
 });
 
-router.get('/episodes/:storyId', async (req, res) => {
+// GET - getEpisodesByStoryId() - localhost:8000/stories/1/episodes
+router.get('/:storyId/episodes', async (req, res) => {
   try {
-    const episodes = await Stories.getEpisodesByStoryID(req.params.storyId);
+    const episodes = await Stories.getEpisodesByStoryId(req.params.storyId);
     if (episodes.length === 0 || !episodes)
       res.status(404).json({ message: 'story id not found' });
     else {
@@ -91,6 +92,19 @@ router.post('/episodes', async (req, res) => {
   try {
     const episode = await Stories.addEpisode(req.body);
     res.status(200).json(episode);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// [] GET storyEpisodePrompt by episode
+// [] Prompts are the writing prompts the children are getting -
+// - when they are asking write/draw something based on a story
+
+router.get('/:storyId/banana', async (req, res) => {
+  try {
+    const story = await Stories.testing(req.params.storyId);
+    res.status(200).json(story);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
