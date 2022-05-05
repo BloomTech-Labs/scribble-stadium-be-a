@@ -23,13 +23,38 @@ async function remove(id) {
   return deletedStory;
 }
 
+// .join('Stories as s', 'e.StoryID', 's.ID') // for reference
+/**
+ * Queries the database to retrieve all episodes for a specific story with given ID
+ * @param {number} storyID the ID to search for in the database
+ * @returns {Promise} a promise that resolves to story object of the given story ID
+ */
+const getEpisodesByStoryID = (storyId) => {
+  return db('storyEpisodes').where({ storyId: storyId }).select('*'); // .first();
+};
+
 module.exports = {
   getAll,
   getStoryById,
   add,
   updateById,
   remove,
+  getEpisodesByStoryID,
 };
+
+// const getEpisodesByStoryID = (storyID) => {
+//   return db('Episodes as e')
+//     .join('Stories as s', 'e.StoryID', 's.ID')
+//     .where('s.ID', storyID)
+//     .select(
+//       'e.ID',
+//       'e.StoryID',
+//       'e.EpisodeNumber',
+//       'e.TextURL',
+//       'e.AudioURL',
+//       'e.Content'
+//     );
+// };
 
 // Old labs BE for reference:
 // module.exports = {
