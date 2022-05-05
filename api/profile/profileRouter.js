@@ -1,7 +1,7 @@
 const express = require('express');
 const Profiles = require('./profileModel');
 const router = express.Router();
-const { checkProfileExists } = require('./profile-middleware');
+
 /**
  * @swagger
  * components:
@@ -321,7 +321,7 @@ router.delete('/:id', (req, res) => {
  *                profile:
  *                  $ref: '#/components/schemas/Profile'
  */
-router.get('/:id/children', checkProfileExists, async (req, res) => {
+router.get('/:id/children', async (req, res) => {
   const id = req.params.id;
   Profiles.findChildren(id)
     .then((children) => {
