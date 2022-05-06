@@ -34,35 +34,9 @@ async function addEpisode(storyArg) {
   return newEpisode;
 }
 
-/**
- * Queries the database for a specific story with given ID
- * @param {number} id the id to search for in the database
- * @returns {Promise} a promise that resolves to story object of the
- * given story ID with all episodes and drawing/writing prompts
- */
-
-// rename more specific - with episodes
-const testing = async (storyId) => {
-  // grabs a story table by story id = 'title', 'author', 'description'
-  let story = await db('Stories').where('Stories.id', storyId); // I think I have to use 'Stories' here this id name wrong.......
-
-  // grabs all episodes for a given storyId
-  const episodes = await getEpisodesByStoryId(storyId);
-
-  console.log('@@@@@@@@@@@@@@@@@@@@@@@ episodes =', episodes);
-
-  return story; // just for testing
-
-  // make this forEach
-  // getting prompts from db and adding to each episode from arr
-  // for (let i = 0; i < episodes.length; i++) {
-  //   let prompts = await getPromptsByEpisodeID(episodes[i].id);
-  //   episodes[i].WritingPrompt = prompts[0].WritingPrompt;
-  //   episodes[i].DrawingPrompt = prompts[0].DrawingPrompt;
-  // }
-  // story.episodes = episodes;
-  // return [story];
-};
+async function getEpisodePromptByEpisodeId(episodeId) {
+  return db('storyEpisodePrompts').where({ episodeId: episodeId }).select('*');
+}
 
 module.exports = {
   getAll,
@@ -71,9 +45,35 @@ module.exports = {
   updateById,
   remove,
   getEpisodesByStoryId,
+  getEpisodePromptByEpisodeId,
   addEpisode,
-  testing,
 };
+
+/**
+ * Queries the database for a specific story with given ID
+ * @param {number} id the id to search for in the database
+ * @returns {Promise} a promise that resolves to story object of the
+ * given story ID with all episodes and drawing/writing prompts
+ */
+
+// const getEpisodePromptByEpisodeId = async (id) => {
+//   // grabs a story table by story id = 'title', 'author', 'description'
+//   let story = await db('Stories').where('Stories.id', id);
+
+//   // grabs all episodes for a given id
+//   const episodes = await getEpisodesByStoryId(id);
+
+//   console.log('@@@@@@@@@@@@@@@@@@@@@@@ episodes =', episodes);
+
+// getting prompts from db and adding to each episode from arr
+//   for (let i = 0; i < episodes.length; i++) {
+//     let prompts = await getPromptsByEpisodeID(episodes[i].id);
+//     episodes[i].WritingPrompt = prompts[0].WritingPrompt;
+//     episodes[i].DrawingPrompt = prompts[0].DrawingPrompt;
+//   }
+//   story.episodes = episodes;
+//   return [story];
+// };
 
 // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ //
 // @@@@@@@@@@@@@@@@@@       @@@@@@@@@@@@@@@@@@@@@ //

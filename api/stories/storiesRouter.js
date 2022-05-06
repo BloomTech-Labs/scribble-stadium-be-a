@@ -97,13 +97,15 @@ router.post('/episodes', async (req, res) => {
   }
 });
 
-// [] GET storyEpisodePrompt by episode
+// [] GET storyEpisodePrompt by episode id
 // [] Prompts are the writing prompts the children are getting -
 // - when they are asking write/draw something based on a story
 
-router.get('/:storyId/banana', async (req, res) => {
+router.get('/:episodeId/prompts', async (req, res) => {
   try {
-    const story = await Stories.testing(req.params.storyId);
+    const story = await Stories.getEpisodePromptByEpisodeId(
+      req.params.episodeId
+    );
     res.status(200).json(story);
   } catch (err) {
     res.status(500).json({ message: err.message });
