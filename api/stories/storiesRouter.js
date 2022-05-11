@@ -1,27 +1,72 @@
 const router = require('express').Router();
 const Stories = require('./storiesModel');
 const { checkId } = require('./storiesMiddleware');
-// const { crudOperationsManager } = require('../lib/index');
 
+// CLUTTERED MESS:
+// const { crudOperationsManager } = require('../lib/index');
 // Intro to Relational Databases (Gabriel)
 // https://bloomtech-1.wistia.com/medias/cfmhiymcj7
 
-// Endpoints Ash asked for*
-// [x] GET all episode by story
-// [?] POST to add episode for a story
-// [] GET storyEpisodePrompt by episode
+// Or you can send all the necessary information in a single endpoint. For example:
+// This one endpoint would return the corresponding episodes and prompts as well.
+// GET story by id - /stories/id
 
-// [x] GET - getAll() - get all episodes (chapters) of story.
+// notes
+// Primary id's need to be auto incrementing.
+// Most POST req do not have an id in the param.
 
-// [?] POST - add() - add a chapter to the story.
+// Q's for Ash
+// ASK HOW TO CHANGE THE URL PATH SO 'STORIES' IS IN THE FUNCTION PATH.
+// Does every id have to be in the url AKA req.params rather than req.body?
 
-// [] Prompts are the writing prompts the children are getting -
-// - when they are asking write/draw something based on a story
+// NEED TO CHANGE MIGRATION DELETE EPISODEID
 
-// GET - getAll() - localhost:8000/stories
+/*
+
+Create individual endpoints for each table. For example:
+
+[x] GET  /stories/id                     - story by i
+[x] POST /stories                        - post a story 
+
+[x] GET  /stories/storyId/episodes       - get all episodes for a storyId - stories/storyId/episodes
+[x] GET  /stories/episodes/episodeId     - episode by id 
+[ ] POST /stories/episodes               - create new episode to existing story, connect stories primary id to episode storyId (req.body) // front end will make them match.
+
+[ ] GET  /stories/episodes/id/prompt     - get individual episode by episodeId, send prompts with it 
+[ ] POST for the prompts by episode id
+
+
+
+TABLES: stories, storyEpisodes, storyEpisodePrompt
+
+stories = {
+  id: '7',
+  title: 'text',
+  description: 'text',
+  author: 'text',
+}
+
+storyEpisodes = {
+  id: 1,
+  storyId: 7,
+  textImgUrl: 'text',
+  audioUrl: 'text',
+  content: 'text',
+}
+
+storyEpisodePrompts = {
+  id: 1,
+  episodeId: 1,
+  type: 'text',
+  prompt: 'text',
+}
+
+*/
+
+// GET - getAllStories() - localhost:8000/stories
 router.get('/', async (req, res) => {
   try {
-    const stories = await Stories.getAll();
+    const stories = await Stories.getAllStories();
     console.log('stories =', stories);
     res.status(200).json(stories);
   } catch (err) {
@@ -29,25 +74,17 @@ router.get('/', async (req, res) => {
   }
 });
 
-// // crudOps version.
-// router.get('/:id', checkId, async (req, res) => {
-//   const { id } = req.params;
-//   crudOperationsManager.getAll(
-//     res,
-//     Stories.getStoryById,
-//     'Story could not be retrieved because id does not exist',
-//     id
-//   );
-// });
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+// @@@@@@@@@@@@@     storyEpisodes     @@@@@@@@@@@@@@@@@@
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-// GET - getStoryById() - localhost:8000/stories/1
-router.get('/:id', checkId, async (req, res) => {
-  try {
-    const story = await Stories.getStoryById(req.params.id);
-    res.status(200).json(story);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
+// Needs middleware.
+// GET  /stories/episodes/episodeId    - Getting episodes by the episodes id
+router.get('/episodes/:episodeId', async (req, res) => {
+  const episodes = await Stories.getEpisodeById(req.params.episodeId);
+  res.status(200).json(episodes);
 });
 
 // POST - add() - localhost:8000/stories
@@ -77,18 +114,18 @@ router.delete('/:id', checkId, async (req, res) => {
 router.get('/:storyId/episodes', async (req, res) => {
   try {
     const episodes = await Stories.getEpisodesByStoryId(req.params.storyId);
-    if (episodes.length === 0 || !episodes)
-      res.status(404).json({ message: 'story id not found' });
-    else {
-      res.status(200).json(episodes);
-    }
+    if (episodes.length === 0)
+      res.status(404).json({ message: 'StoryId not found' });
+    else res.status(200).json(episodes);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 });
 
+// PER Ash - the endpoint should be stories/id/episodes
+// Before refactoring.
 // POST - addEpisode() - localhost:8000/stories/episodes
-router.post('/episodes', async (req, res) => {
+router.post('/:id/episodes', async (req, res) => {
   try {
     const episode = await Stories.addEpisode(req.body);
     res.status(200).json(episode);
@@ -97,9 +134,25 @@ router.post('/episodes', async (req, res) => {
   }
 });
 
-// [] GET storyEpisodePrompt by episode id
-// [] Prompts are the writing prompts the children are getting -
-// - when they are asking write/draw something based on a story
+// This is not working and I do not know why.
+router.post('/episodes', async (req, res) => {
+  try {
+    const id = await Stories.getEpisodesByStoryId(req.body.storyId);
+    // console.log('@@@@@@@@@@@@@@@@', req.body.storyId);
+    console.log(id);
+    if (id) {
+      res
+        .status(400)
+        .json({ message: `storyId: ${req.body.storyId} already exists.` });
+    } else {
+      console.log('else_________');
+      const episode = await Stories.addEpisode(req.body);
+      res.status(200).json(episode);
+    }
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
 
 router.get('/:episodeId/prompts', async (req, res) => {
   try {
@@ -113,6 +166,17 @@ router.get('/:episodeId/prompts', async (req, res) => {
 });
 
 module.exports = router;
+
+// Old version for reference, delete when done. // No edge case.
+// POST - add() - localhost:8000/stories
+// router.post('/', async (req, res) => {
+//   try {
+//     const story = await Stories.add(req.body);
+//     res.status(200).json(story);
+//   } catch (err) {
+//     res.status(500).json({ message: err.message });
+//   }
+// });
 
 // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@

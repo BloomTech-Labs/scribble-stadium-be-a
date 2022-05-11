@@ -1,11 +1,13 @@
 const db = require('../../data/db-config');
 
-function getAll() {
+// Querying through 3 different tables*
+
+function getAllStories() {
   return db('stories');
 }
 
-function getStoryById(idArg) {
-  return db('stories').where({ id: idArg }).first();
+function getStoryById(id) {
+  return db('stories').where({ id: id }).first();
 }
 
 async function add(storyArg) {
@@ -23,13 +25,24 @@ async function remove(id) {
   return deletedStory;
 }
 
-function getEpisodesByStoryId(storyId) {
-  return db('storyEpisodes').where({ storyId: storyId }).select('*');
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+// @@@@@@@@@@@@@     storyEpisodes     @@@@@@@@@@@@@@@@@@
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+function getEpisodeById(id) {
+  return db('storyEpisodes').where({ id: id }).first();
 }
 
-async function addEpisode(storyArg) {
-  const [newEpisode] = await db('storyEpisodes') // [newEpisode] means that the output will be an obj rather than ann arr of obj/'s
-    .insert(storyArg)
+function getEpisodesByStoryId(storyId) {
+  return db('storyEpisodes').where('storyId', storyId).select('*');
+}
+
+// Decomposition / [newEpisode], means that the output will be an obj rather than an obj inside an array
+async function addEpisode(storyObj) {
+  const [newEpisode] = await db('storyEpisodes')
+    .insert(storyObj)
     .returning('*');
   return newEpisode;
 }
@@ -39,7 +52,8 @@ async function getEpisodePromptByEpisodeId(episodeId) {
 }
 
 module.exports = {
-  getAll,
+  getEpisodeById,
+  getAllStories,
   getStoryById,
   add,
   updateById,
