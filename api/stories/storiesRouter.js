@@ -2,26 +2,21 @@ const router = require('express').Router();
 const Stories = require('./storiesModel');
 const { checkId } = require('./storiesMiddleware');
 
-// CLUTTERED MESS:
-// const { crudOperationsManager } = require('../lib/index');
-// Intro to Relational Databases (Gabriel)
-// https://bloomtech-1.wistia.com/medias/cfmhiymcj7
-
-// Or you can send all the necessary information in a single endpoint. For example:
-// This one endpoint would return the corresponding episodes and prompts as well.
-// GET story by id - /stories/id
-
-// notes
-// Primary id's need to be auto incrementing.
-// Most POST req do not have an id in the param.
-
-// Q's for Ash
-// ASK HOW TO CHANGE THE URL PATH SO 'STORIES' IS IN THE FUNCTION PATH.
-// Does every id have to be in the url AKA req.params rather than req.body?
-
-// NEED TO CHANGE MIGRATION DELETE EPISODEID
-
 /*
+Intro to Relational Databases (Gabriel)
+https://bloomtech-1.wistia.com/medias/cfmhiymcj7
+
+Notes:
+Primary id's need to be auto incrementing.
+Most POST req do not have an id in the param.
+
+Q's:
+- Does every id have to be in the url AKA req.params rather than req.body?
+- The stories migration has a string primary key, what's up with that? 
+- Delete 'episodeId' in the episode migration file.
+- Which endpoints need auth and what is the last auth function in the auth file?
+
+
 
 Create individual endpoints for each table. For example:
 
@@ -35,12 +30,12 @@ Create individual endpoints for each table. For example:
 [ ] GET  /stories/episodes/id/prompt     - get individual episode by episodeId, send prompts with it 
 [ ] POST for the prompts by episode id
 
-
+Add middleware and edge cases,
 
 TABLES: stories, storyEpisodes, storyEpisodePrompt
 
 stories = {
-  id: '7',
+  id: '7',       
   title: 'text',
   description: 'text',
   author: 'text',
@@ -63,7 +58,7 @@ storyEpisodePrompts = {
 
 */
 
-// GET - getAllStories() - localhost:8000/stories
+// GET - getAllStories() - localhost:8000/stories For testing purposes*
 router.get('/', async (req, res) => {
   try {
     const stories = await Stories.getAllStories();
@@ -75,9 +70,7 @@ router.get('/', async (req, res) => {
 });
 
 // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 // @@@@@@@@@@@@@     storyEpisodes     @@@@@@@@@@@@@@@@@@
-// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 // Needs middleware.
@@ -134,21 +127,22 @@ router.post('/:id/episodes', async (req, res) => {
   }
 });
 
-// This is not working and I do not know why.
+// POST /stories/episodes
+// Create new episode to existing story, connect stories 'primary id' to 'episode storyId' (req.body)
+// Front end will make them match.
+
 router.post('/episodes', async (req, res) => {
   try {
-    const id = await Stories.getEpisodesByStoryId(req.body.storyId);
-    // console.log('@@@@@@@@@@@@@@@@', req.body.storyId);
-    console.log(id);
-    if (id) {
-      res
-        .status(400)
-        .json({ message: `storyId: ${req.body.storyId} already exists.` });
-    } else {
-      console.log('else_________');
-      const episode = await Stories.addEpisode(req.body);
-      res.status(200).json(episode);
-    }
+    const { storyId, textImgUrl, audioUrl, content, episodeNum } = req.body; // exploding the body
+    const episodeObjectData = {
+      storyId,
+      textImgUrl,
+      audioUrl,
+      content,
+      episodeNum,
+    };
+    console.log('~~~~~~ episodeObjectData =', episodeObjectData);
+    res.status(200).json(Stories.addEpisode(episodeObjectData));
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

@@ -7,21 +7,21 @@ const { faker } = require('@faker-js/faker');
 const storyEpisodes = [
   {
     storyId: 1,
-    episodeId: 1,
+    episodeNum: 1,
     textImgUrl: 'https://i.imgur.com/qZQXQZu.png',
     audioUrl: 'https://i.imgur.com/qZQXQZu.mp3',
     content: faker.lorem.paragraph(),
   },
   {
     storyId: 2,
-    episodeId: 2,
+    episodeNum: 2,
     textImgUrl: 'https://i.imgur.com/qZQXQZu.png',
     audioUrl: 'https://i.imgur.com/qZQXQZu.mp3',
     content: faker.lorem.paragraph(),
   },
   {
     storyId: 3,
-    episodeId: 3,
+    episodeNum: 3,
     textImgUrl: 'https://i.imgur.com/qZQXQZu.png',
     audioUrl: 'https://i.imgur.com/qZQXQZu.mp3',
     content: faker.lorem.paragraph(),
