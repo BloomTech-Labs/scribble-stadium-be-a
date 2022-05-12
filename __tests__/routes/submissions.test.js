@@ -45,63 +45,52 @@ describe('Testing childSubmissionRouter endpoints', () => {
       ).toBe(1);
     });
 
-    it('should return 404 when no submission is found', async () => {
-      childSubmissionsModel.getSubmissionByChildId.mockResolvedValue();
-      const res = await request(server).get('/submissions/5');
+    // it('should return 404 when no submission is found', async () => {
+    //   childSubmissionsModel.getSubmissionByChildId.mockResolvedValue();
+    //   const res = await request(server).get('/submissions/5');
 
-      expect(res.status).toBe(404);
-      expect(res.body.error).toBe(
-        'InvalidChild submission could not be retrieved because the childId was '
-      );
+    //   expect(res.status).toBe(404);
+    //   expect(res.body.error).toBe(
+    //     'InvalidChild submission could not be retrieved because the childId was '
+    //   );
+    // });
+  });
+
+  describe('POST /submissions -- tests the creation of a submission with bare minimum fields from req.body', () => {
+    it('should return 201 when a submission is created', async () => {
+      const mockSubmission = {
+        childId: 3,
+        storyId: 2,
+        episodeId: 1,
+      };
+      childSubmissionsModel.getSubmissionByChildId.mockResolvedValue(undefined);
+      childSubmissionsModel.addSubmission.mockResolvedValue(mockSubmission);
+      const res = await request(server)
+        .post('/submissions')
+        .send(mockSubmission);
+
+      expect(res.status).toBe(201);
+      expect(res.body.childId).toBe(3);
+      expect(childSubmissionsModel.addSubmission.mock.calls.length).toBe(1);
     });
   });
 
-  // describe('POST /submissions -- tests the creation of a submission', () => {
-  //   it('should return 201 when a submission is created', async () => {
-  //     const mockSubmission = {
-  //       childId: 3,
-  //       storyId: 2,
-  //       episodeId: 1,
-  //       approvedAt: null,
-  //       episodeStartDate: null,
-  //       finishedReadingAt: null,
-  //       finishedWritingAt: null,
-  //       squadCreatedAt: null,
-  //       votedAt: null,
-  //       created_at: '2022-05-10T21:37:18.236Z',
-  //       updated_at: '2022-05-10T21:37:18.236Z',
-  //     };
-  //     childSubmissionsModel.getSubmissionByChildId.mockResolvedValue(undefined);
-  //     childSubmissionsModel.addSubmission.mockResolvedValue(mockSubmission);
-  //     const res = await request(server)
-  //       .post('/submissions')
-  //       .send(mockSubmission);
+  describe('Patch /submissions/:id -- tests the update of the submission by that submissions id with single field update', () => {
+    it('should return 204 when submission is updated', async () => {
+      const updates = {
+        storyId: 77,
+      };
+      childSubmissionsModel.getSubmissionByChildId.mockResolvedValue(updates);
+      childSubmissionsModel.updateSubmissionBySubmissionId.mockResolvedValue([
+        updates,
+      ]);
 
-  //     expect(res.status).toBe(201);
-  //     expect(res.body.mockSubmission.childId).toBe(3);
-  //     expect(childSubmissionsModel.create.mock.calls.length).toBe(1);
-  //   });
-  // });
-
-  // describe('Patch /submissions/:id -- tests the update of the submission by that submissions id', () => {
-  //   it('should return 204 when submission is updated', async () => {
-  //     const updatedSubmission = {
-  //       id: 1,
-  //       childId: 1,
-  //       storyId: 77,
-  //       episodeId: 1,
-  //     };
-  //     childSubmissionsModel.getSubmissionByChildId.mockResolvedValue(
-  //       updatedSubmission
-  //     );
-  //     childSubmissionsModel.mockResolvedValue([updatedSubmission]);
-
-  //     const res = await request(server)
-  //       .patch('/submission/1')
-  //       .send(updatedSubmission);
-  //     expect(res.status).toBe(204);
-  //     expect(res.body.submission.storyId).toBe(77);
-  //     expect(childSubmissionsModel.update.mock.calls.length).toBe(1);
-  //   });
-  // });
+      const res = await request(server).patch('/submission/1').send(updates);
+      expect(res.status).toBe(204);
+      expect(res.body).toEqual({}); // the crud ops does not send back a res.body so the object sent back from the request server is an empty object
+      expect(
+        childSubmissionsModel.updateSubmissionBySubmissionId.mock.calls.length
+      ).toBe(1);
+    });
+  });
 });
