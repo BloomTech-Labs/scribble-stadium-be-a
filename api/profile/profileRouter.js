@@ -1,7 +1,7 @@
 const express = require('express');
 const Profiles = require('./profileModel');
 const router = express.Router();
-
+const { crudOperationsManager } = require('../lib/index');
 /**
  * @swagger
  * components:
@@ -323,13 +323,15 @@ router.delete('/:id', (req, res) => {
  */
 router.get('/:id/children', async (req, res) => {
   const id = req.params.id;
-  Profiles.findChildren(id)
-    .then((children) => {
-      res.status(200).json(children);
-    })
-    .catch((err) => {
-      res.status(500).json({ error: err.message });
-    });
+
+  crudOperationsManager.getAll(res, Profiles.findChildren, 'Parent ', id);
+  // Profiles.findChildren(id)
+  // .then((children) => {
+  //   res.status(200).json(children);
+  // })
+  // .catch((err) => {
+  //   res.status(500).json({ error: err.message });
+  // });
 });
 
 module.exports = router;
