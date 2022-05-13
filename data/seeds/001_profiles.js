@@ -11,14 +11,14 @@ const fakeProfiles = [...new Array(4)].map((i, idx) => ({
 }));
 
 const parentProfile = {
-  id: '004',
+  id: '614025c94mmm6d00682bf2a6',
   avatarUrl: faker.image.avatar(),
   email: 'llama004@maildrop.cc',
   name: 'parent',
 };
 
 const adminProfile = {
-  id: '005',
+  id: '614025c94nnn6d00682bf2a6',
   avatarUrl: faker.image.avatar(),
   email: 'llama005@maildrop.cc',
   name: 'admin',
@@ -26,7 +26,6 @@ const adminProfile = {
 
 const profiles = [...fakeProfiles, parentProfile, adminProfile];
 
-console.log(profiles);
 exports.seed = function (knex) {
   // Deletes ALL existing entries
   return knex('profiles')
