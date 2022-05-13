@@ -6,6 +6,6 @@ exports.up = function (knex) {
 
 exports.down = function (knex) {
   return knex.schema.alterTable('children', (table) => {
-    table.integer('parentId').alter();
+    table.string('parentId').alter();
   });
 };
