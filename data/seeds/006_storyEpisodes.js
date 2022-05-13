@@ -32,7 +32,7 @@ const storyEpisodes = [
 ];
 
 exports.seed = function (knex) {
-  // Deletes ALL existing entries
+  // Deletes ALL  existing entries
   return knex('storyEpisodes')
     .del()
     .then(function () {
