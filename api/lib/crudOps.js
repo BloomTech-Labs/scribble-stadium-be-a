@@ -12,11 +12,13 @@ const { send } = require('./errorHandler');
 const getAll = async (res, query, name, ...args) => {
   try {
     const data = await query(...args);
-    if (data.length <= 0) {
+    if (data.length == 0) {
+      // added this because data in an array.  An empty array will pass a status of 200.
       throw new Error('NotFound');
     }
     res.status(200).json(data);
   } catch (error) {
+    console.log(error, res, name, 'CRUD OPS ERROR, RES, NAME');
     send(res, error, name);
   }
 };

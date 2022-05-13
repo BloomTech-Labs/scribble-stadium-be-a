@@ -2,7 +2,6 @@ const { faker } = require('@faker-js/faker');
 
 const submissions = [
   {
-    id: 1,
     childId: 1,
     storyId: 1,
     episodeId: 1,
@@ -14,7 +13,6 @@ const submissions = [
     votedAt: faker.date.past(),
   },
   {
-    id: 2,
     childId: 2,
     storyId: 2,
     episodeId: 2,
@@ -27,7 +25,6 @@ const submissions = [
   },
 
   {
-    id: 3,
     childId: 3,
     storyId: 3,
     episodeId: 3,

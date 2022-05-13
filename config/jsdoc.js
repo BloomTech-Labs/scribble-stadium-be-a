@@ -28,6 +28,10 @@ module.exports = {
         description: 'Operations for profile',
       },
       {
+        name: 'submissions',
+        description: 'Operations for child submissions endpoints',
+      },
+      {
         name: 'data',
         description: 'Operations for data science service',
       },
