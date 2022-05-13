@@ -1,4 +1,4 @@
-# Scribble Stadium BE - A ----
+# Scribble Stadium BE - A
 
 This repository assumes a handful of industry practices and standards. We strive to keep you on the bleeding edge of the industry and as a result, we have made some opinions for you so that you don't have to; you're welcome.
 
