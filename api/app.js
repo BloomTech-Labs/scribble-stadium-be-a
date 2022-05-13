@@ -26,6 +26,7 @@ const profileRouter = require('./profile/profileRouter');
 const dsRouter = require('./dsService/dsRouter');
 
 const storiesRouter = require('./stories/storiesRouter');
+const storyEpisodePromptsRouter = require('./storyEpisodePrompts/storyEpisodePromptsRouter');
 
 const app = express();
 
@@ -61,6 +62,7 @@ app.use('/', indexRouter);
 app.use(['/profile', '/profiles'], profileRouter);
 app.use('/data', dsRouter);
 app.use('/stories', storiesRouter);
+app.use('/storyEpisodePrompts', storyEpisodePromptsRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
