@@ -1,6 +1,52 @@
 const router = require('express').Router();
 const Stories = require('./storiesModel');
 const { checkId } = require('./storiesMiddleware');
+const { crudOperationsManager } = require('../lib/index');
+const { auth0Verify, authProfile } = require('../middleware/authProfile');
+
+// How do we test the Auth middleware? Even without the Auth middleware everything is broken without a token. So I am not sure how to test it.
+// Delete in this file throws a 500 when using crudOps, and I am not sure why.
+
+// GET - getAllStories() - localhost:8000/stories
+router.get('/', auth0Verify, authProfile, (req, res) => {
+  crudOperationsManager.getAll(res, Stories.getAllStories, 'All stories ');
+});
+
+// POST - add() - localhost:8000/stories
+router.post('/', auth0Verify, authProfile, (req, res) => {
+  crudOperationsManager.post(res, Stories.add, 'newStory', req.body);
+});
+
+// PUT - updateById() - localhost:8000/stories/1
+router.put('/:id', auth0Verify, authProfile, checkId, (req, res) => {
+  crudOperationsManager.update(
+    res,
+    Stories.updateById,
+    'updatedStory',
+    req.params.id,
+    req.body
+  );
+});
+
+// DELETE - remove() - localhost:8000/stories/1
+router.delete('/:id', auth0Verify, authProfile, async (req, res) => {
+  const id = req.params.id;
+  await Stories.remove(id);
+  res.status(204).json(`Story id: ${id} has been removed.`);
+
+  // crudOps version not working and I do not know why.
+  // crudOperationsManager.remove(
+  //   res,
+  //   Stories.remove,
+  //   'removedStory',
+  //   req.params.id,
+  // )
+});
+
+module.exports = router;
+
+// * AKA model @param {Function} query the model function that runs the relevant database query
+// * errorName MSG @param {String} name the singular name of the data object being operated on
 
 /*
 Notes: 
@@ -37,39 +83,3 @@ storyEpisodePrompts = {
   prompt: 'text',
 }
 */
-
-// GET - getAllStories() - localhost:8000/stories - For testing purposes*
-router.get('/', async (req, res) => {
-  try {
-    const stories = await Stories.getAllStories();
-    console.log('stories =', stories);
-    res.status(200).json(stories);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
-
-// POST - add() - localhost:8000/stories
-router.post('/', async (req, res) => {
-  try {
-    const story = await Stories.add(req.body);
-    res.status(200).json(story);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
-
-// PUT - updateById() - localhost:8000/stories/1
-router.put('/:id', checkId, async (req, res) => {
-  const updatedStory = await Stories.updateById(req.params.id, req.body);
-  res.status(200).json(updatedStory);
-});
-
-// DELETE - remove() - localhost:8000/stories/1
-router.delete('/:id', checkId, async (req, res) => {
-  const id = req.params.id;
-  await Stories.remove(id);
-  res.status(204).json(`Story id: ${id} has been removed.`);
-});
-
-module.exports = router;
