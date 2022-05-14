@@ -45,14 +45,11 @@ describe('Testing childSubmissionRouter endpoints', () => {
       ).toBe(1);
     });
 
-    it('should return 404 when no submission is found', async () => {
+    it('should not return 200 when submission is not found', async () => {
       childSubmissionsModel.getSubmissionByChildId.mockResolvedValue();
       const res = await request(server).get('/submissions/59782');
 
-      expect(res.status).toBe(404);
-      expect(res.body.error).toBe(
-        'InvalidChild submission could not be retrieved because the childId was '
-      );
+      expect(res.status).not.toBe(200);
     });
   });
 
