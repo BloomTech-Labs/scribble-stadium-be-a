@@ -1,16 +1,14 @@
 const db = require('../../data/db-config');
 
-// Querying through 3 different tables*
-
 function getAllStories() {
   return db('stories');
 }
 
 function getStoryById(id) {
-  return db('stories').where({ id: id }).first();
+  return db('stories').where({ id: id });
 }
 
-async function add(storyArg) {
+async function addStory(storyArg) {
   const [newStory] = await db('stories').insert(storyArg).returning('*');
   return newStory;
 }
@@ -28,7 +26,7 @@ async function remove(id) {
 module.exports = {
   getAllStories,
   getStoryById,
-  add,
+  addStory,
   updateById,
   remove,
 };

@@ -5,6 +5,9 @@ const { auth0Verify, authProfile } = require('../middleware/authProfile');
 
 // ***create middleware to check if episode with that id exists...
 // GET - getEpisodeById(req.params.id) - http://localhost:8000/storyEpisodePrompts/episodes/1/prompt
+
+// Add this*
+// get all prompts where episodeId === req.params.id
 router.get(
   '/episodes/:id/prompt',
   auth0Verify,
@@ -17,6 +20,7 @@ router.get(
         req.params.id
       ); // Should send an array of prompts
 
+      // ONLY need prompts returned here. In arr again.
       const combinedEpisodeAndEpisodePrompts = {
         id: episode.id,
         storyId: episode.storyId,

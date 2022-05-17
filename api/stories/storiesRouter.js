@@ -4,17 +4,23 @@ const { checkId } = require('./storiesMiddleware');
 const { crudOperationsManager } = require('../lib/index');
 const { auth0Verify, authProfile } = require('../middleware/authProfile');
 
-// How do we test the Auth middleware? Even without the Auth middleware everything is broken without a token. So I am not sure how to test it.
-// Delete in this file throws a 500 when using crudOps, and I am not sure why.
-
 // GET - getAllStories() - localhost:8000/stories
 router.get('/', auth0Verify, authProfile, (req, res) => {
   crudOperationsManager.getAll(res, Stories.getAllStories, 'All stories ');
 });
 
-// POST - add() - localhost:8000/stories
+// POST - addStory() - localhost:8000/stories
 router.post('/', auth0Verify, authProfile, (req, res) => {
-  crudOperationsManager.post(res, Stories.add, 'newStory', req.body);
+  crudOperationsManager.post(res, Stories.addStory, 'newStory', req.body);
+});
+
+router.get('/:id', auth0Verify, authProfile, checkId, (req, res) => {
+  crudOperationsManager.getById(
+    res,
+    Stories.getStoryById,
+    'story',
+    req.params.id
+  );
 });
 
 // PUT - updateById() - localhost:8000/stories/1
@@ -45,19 +51,7 @@ router.delete('/:id', auth0Verify, authProfile, async (req, res) => {
 
 module.exports = router;
 
-// * AKA model @param {Function} query the model function that runs the relevant database query
-// * errorName MSG @param {String} name the singular name of the data object being operated on
-
 /*
-Notes: 
-- Most POST req do not have an id in the param.
-- Add middleware and edge cases. 
-
-[ ] GET  /stories/id                     - story by i
-[ ] POST /stories                        - post a story 
-[ ] GET  /stories/episodes/id/prompt     - get individual episode by episodeId, send prompts with it 
-[ ] POST for the prompts by episode id
-
 Tables used:
 
 stories = {
