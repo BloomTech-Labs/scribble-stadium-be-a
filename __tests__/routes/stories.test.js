@@ -5,9 +5,6 @@ const storiesRouter = require('../../api/stories/storiesRouter');
 const server = express();
 server.use(express.json());
 
-// supertest post
-// https://www.youtube.com/watch?v=T2sYitv2OAY
-
 // stories = {
 //   id: '7',
 //   title: 'text',
@@ -17,14 +14,11 @@ server.use(express.json());
 
 // 47 min of testing video
 // https://www.youtube.com/watch?v=hpIf6GG7B9c&list=PL0pqmT38sWfthShZSffvgJp7MapFC0Ao_&index=65&t=1462s
-
 // answers video = https://bloomtech-1.wistia.com/medias/5ylj9llq4c
 
-// Cant have access to real tokens and profiles
-// Creating a fake auth0 profile
-// need fake person and location
 
-jest.mock('../../api/stories/storiesModel');
+
+jest.mock('../../api/stories/storiesModel'); // Should we mock routes too?
 // mock the auth middleware completely
 jest.mock('../../api/middleware/authProfile', () => {
   return {
@@ -92,22 +86,29 @@ describe('stories router endpoints', () => {
     });
   }); // End of GET /stories/:id
 
+
+
+
+
   describe('PUT /stories/:id', () => {
     it('should return 204 when updated', async () => {
       const story = {
         title: 'text',
         description: 'text',
       };
+
       Stories.updateById.mockResolvedValue(story);
       Stories.getStoryById.mockResolvedValue([story]);
       const res = await request(server).put('/stories/1').send(story);
-      // expect(res.body).toEqual({}); // because crudOps sends back an empty object
       expect(res.status).toBe(204);
-      console.log('@@@@@@@@@@@@@@@', res.body);
+      // console.log('@@@@@@@@@@@@@@', res.status);
     });
 
-    // it("should return 404 when not found", async () => {
 
+
+    // it("should return 404 when not found", async () => {
     // });
   });
-}); // End of stories router endpoints
+
+
+}); // End of parent test suite
