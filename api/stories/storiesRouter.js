@@ -1,6 +1,5 @@
 const router = require('express').Router();
 const Stories = require('./storiesModel');
-const { checkId } = require('./storiesMiddleware');
 const { crudOperationsManager } = require('../lib/index');
 const { auth0Verify, authProfile } = require('../middleware/authProfile');
 
@@ -15,7 +14,7 @@ router.post('/', auth0Verify, authProfile, (req, res) => {
 });
 
 // GET - getStoryById(req.params.id) - localhost:8000/stories/1
-router.get('/:id', auth0Verify, authProfile, checkId, (req, res) => {
+router.get('/:id', auth0Verify, authProfile, (req, res) => {
   crudOperationsManager.getById(
     res,
     Stories.getStoryById,
@@ -25,7 +24,7 @@ router.get('/:id', auth0Verify, authProfile, checkId, (req, res) => {
 });
 
 // PUT - updateById(req.params.id) - localhost:8000/stories/1
-router.put('/:id', auth0Verify, authProfile, checkId, (req, res) => {
+router.put('/:id', auth0Verify, authProfile, (req, res) => {
   crudOperationsManager.update(
     res,
     Stories.updateById,
@@ -40,41 +39,6 @@ router.delete('/:id', auth0Verify, authProfile, async (req, res) => {
   const id = req.params.id;
   await Stories.remove(id);
   res.status(204).json(`Story id: ${id} has been removed.`);
-
-  // crudOps version not working and I do not know why.
-  // crudOperationsManager.remove(
-  //   res,
-  //   Stories.remove,
-  //   'removedStory',
-  //   req.params.id,
-  // )
 });
 
 module.exports = router;
-
-/*
-Tables used:
-
-stories = {
-  id: '7',       
-  title: 'text',
-  description: 'text',
-  author: 'text',
-}
-
-storyEpisodes = {
-  id: 1,
-  storyId: 7,
-  episodeNum: 1,
-  textImgUrl: 'text',
-  audioUrl: 'text',
-  content: 'text',
-}
-
-storyEpisodePrompts = {
-  id: 1,
-  episodeId: 1,
-  type: 'text',
-  prompt: 'text',
-}
-*/
