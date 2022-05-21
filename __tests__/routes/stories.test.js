@@ -16,8 +16,6 @@ server.use(express.json());
 // https://www.youtube.com/watch?v=hpIf6GG7B9c&list=PL0pqmT38sWfthShZSffvgJp7MapFC0Ao_&index=65&t=1462s
 // answers video = https://bloomtech-1.wistia.com/medias/5ylj9llq4c
 
-
-
 jest.mock('../../api/stories/storiesModel'); // Should we mock routes too?
 // mock the auth middleware completely
 jest.mock('../../api/middleware/authProfile', () => {
@@ -31,7 +29,7 @@ jest.mock('../../api/middleware/authProfile', () => {
 describe('stories router endpoints', () => {
   beforeAll(() => {
     // This is the module/route being tested
-    server.use(['/stories', '/stories/:id'], storiesRouter);
+    server.use('/stories', storiesRouter);
     jest.clearAllMocks();
   });
 
@@ -86,10 +84,6 @@ describe('stories router endpoints', () => {
     });
   }); // End of GET /stories/:id
 
-
-
-
-
   describe('PUT /stories/:id', () => {
     it('should return 204 when updated', async () => {
       const story = {
@@ -104,11 +98,8 @@ describe('stories router endpoints', () => {
       // console.log('@@@@@@@@@@@@@@', res.status);
     });
 
-
-
     // it("should return 404 when not found", async () => {
     // });
   });
-
 
 }); // End of parent test suite

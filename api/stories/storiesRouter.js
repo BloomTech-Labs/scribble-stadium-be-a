@@ -14,6 +14,7 @@ router.post('/', auth0Verify, authProfile, (req, res) => {
   crudOperationsManager.post(res, Stories.addStory, 'newStory', req.body);
 });
 
+// GET - getStoryById(req.params.id) - localhost:8000/stories/1
 router.get('/:id', auth0Verify, authProfile, checkId, (req, res) => {
   crudOperationsManager.getById(
     res,
@@ -23,7 +24,7 @@ router.get('/:id', auth0Verify, authProfile, checkId, (req, res) => {
   );
 });
 
-// PUT - updateById() - localhost:8000/stories/1
+// PUT - updateById(req.params.id) - localhost:8000/stories/1
 router.put('/:id', auth0Verify, authProfile, checkId, (req, res) => {
   crudOperationsManager.update(
     res,

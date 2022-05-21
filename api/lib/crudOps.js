@@ -33,7 +33,7 @@ const getById = async (res, query, name, ...args) => {
     if (data.length <= 0) {
       throw new Error('NotFound');
     }
-    res.status(200).json(data[0]);
+    res.status(200).json(data);
   } catch (error) {
     send(res, error, name);
   }
