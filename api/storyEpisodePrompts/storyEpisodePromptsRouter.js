@@ -19,12 +19,3 @@ router.post('/', auth0Verify, authProfile, (req, res) => {
 });
 
 exports = module.exports = router;
-
-//   try {
-//     const episodePrompts = await Prompts.getEpisodePromptByEpisodeId(
-//       req.params.episodeId
-//     );
-//     res.status(200).json(episodePrompts);
-//   } catch (err) {
-//     res.status(500).json({ message: err.message });
-//   }
