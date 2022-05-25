@@ -2,20 +2,17 @@ const { faker } = require('@faker-js/faker');
 
 const storyEpisodePrompts = [
   {
-    id: 1,
     episodeId: 1,
     type: 'drawing', //drawing or writing
     prompt: faker.lorem.sentence(),
   },
   {
-    id: 2,
     episodeId: 2,
     type: 'writing', //drawing or writing
     prompt: faker.lorem.sentence(),
   },
 
   {
-    id: 3,
     episodeId: 3,
     type: 'writing', //drawing or writing
     prompt: faker.lorem.sentence(),
