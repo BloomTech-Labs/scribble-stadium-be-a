@@ -21,7 +21,6 @@ describe('storyEpisodePrompts router endpoints', () => {
   });
 
   describe('POST /storyEpisodePrompts', () => {
-
     it('should return 201 when prompt is created', async () => {
       const mockPrompts = {
         episodeId: 89,
@@ -42,7 +41,6 @@ describe('storyEpisodePrompts router endpoints', () => {
   });
 
   describe('GET /storyEpisodePrompts/episodeId', () => {
-
     it('should return 200 when prompts found', async () => {
       Prompts.getEpisodePromptByEpisodeId.mockResolvedValue([
         {

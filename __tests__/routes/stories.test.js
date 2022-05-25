@@ -50,12 +50,10 @@ describe('stories router endpoints', () => {
     });
 
     it("should have title and a description keys in it's object.", async () => {
-      Stories.getStoryById.mockResolvedValue(
-        {
-          title: 'text',
-          description: 'word',
-        },
-      );
+      Stories.getStoryById.mockResolvedValue({
+        title: 'text',
+        description: 'word',
+      });
       const res = await request(server).get('/stories/99');
       expect(res.body.title).toBe('text');
       expect(res.body.description).toBe('word');
@@ -75,5 +73,4 @@ describe('stories router endpoints', () => {
       expect(res.status).toBe(204);
     });
   });
-
 }); // End of parent test suite
