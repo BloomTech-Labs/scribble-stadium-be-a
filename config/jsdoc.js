@@ -1,3 +1,5 @@
+const port = process.env.PORT || 8000;
+
 module.exports = {
   definition: {
     openapi: '3.0.1',
@@ -11,6 +13,11 @@ module.exports = {
         url: 'https://en.wikipedia.org/wiki/MIT_License',
       },
     },
+    servers: [
+      {
+        url: `http://localhost:${port}`,
+      },
+    ],
     tags: [
       {
         name: 'status',
@@ -19,6 +26,10 @@ module.exports = {
       {
         name: 'profile',
         description: 'Operations for profile',
+      },
+      {
+        name: 'submissions',
+        description: 'Operations for child submissions endpoints',
       },
       {
         name: 'data',

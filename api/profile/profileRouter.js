@@ -1,7 +1,7 @@
 const express = require('express');
 const Profiles = require('./profileModel');
 const router = express.Router();
-
+const { crudOperationsManager } = require('../lib/index');
 /**
  * @swagger
  * components:
@@ -290,6 +290,48 @@ router.delete('/:id', (req, res) => {
       error: err.message,
     });
   }
+});
+
+/**
+ * @swagger
+ * /profile/{id}/children:
+ *  get:
+ *    summary: To fetch children for each profile
+ *    description : Get the list of children for a particular profile id
+ *    security:
+ *      - okta: []
+ *    tags:
+ *      - profile
+ *    parameters:
+ *      - $ref: '#/components/parameters/profileId'
+ *    responses:
+ *      404:
+ *        $ref: '#/components/responses/NotFound'
+ *      200:
+ *        description: A profile object
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                message:
+ *                  type: string
+ *                  description: A message about the result
+ *                  example: Profile id found.
+ *                profile:
+ *                  $ref: '#/components/schemas/Profile'
+ */
+router.get('/:id/children', async (req, res) => {
+  const id = req.params.id;
+
+  crudOperationsManager.getAll(res, Profiles.findChildren, 'Parent ', id);
+  // Profiles.findChildren(id)
+  // .then((children) => {
+  //   res.status(200).json(children);
+  // })
+  // .catch((err) => {
+  //   res.status(500).json({ error: err.message });
+  // });
 });
 
 module.exports = router;

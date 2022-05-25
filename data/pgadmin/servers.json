@@ -1,13 +1,13 @@
 {
   "Servers": {
     "1": {
-        "Name": "API-dev",
-        "Group": "Dev",
-        "Port": 5432,
-        "Username": "docker",
-        "Host": "ss-api-db",
-        "SSLMode": "prefer",
-        "MaintenanceDB": "postgres"
+      "Name": "API-dev",
+      "Group": "Dev",
+      "Port": 5432,
+      "Username": "docker",
+      "Host": "ss-api-db",
+      "SSLMode": "prefer",
+      "MaintenanceDB": "postgres"
     }
   }
 }
