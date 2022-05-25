@@ -21,12 +21,14 @@ describe('stories router endpoints', () => {
 
   describe('GET /stories', () => {
     it('should return 200', async () => {
-      Stories.getAllStories.mockResolvedValue([{
-        id: 1,
-        parentId: 1,
-        name: null,
-        pin: null
-      }]);
+      Stories.getAllStories.mockResolvedValue([
+        {
+          id: 1,
+          parentId: 1,
+          name: null,
+          pin: null,
+        },
+      ]);
       const res = await request(server).get('/stories');
 
       expect(res.status).toBe(200);
