@@ -13,7 +13,6 @@ jest.mock('../../api/middleware/authProfile', () => {
   };
 });
 
-// Parent test suite:
 describe('stories router endpoints', () => {
   beforeAll(() => {
     server.use('/stories', storiesRouter);
@@ -22,12 +21,17 @@ describe('stories router endpoints', () => {
 
   describe('GET /stories', () => {
     it('should return 200', async () => {
-      Stories.getAllStories.mockResolvedValue([]);
-      const res = await await request(server).get('/stories');
-      const storiesLength = Stories.getAllStories.mock.calls.length;
+      Stories.getAllStories.mockResolvedValue([{
+        id: 1,
+        parentId: 1,
+        name: null,
+        pin: null
+      }]);
+      const res = await request(server).get('/stories');
+
       expect(res.status).toBe(200);
-      expect(res.body.length).toBe(0);
-      expect(storiesLength).toBe(1);
+      expect(res.body.length).toBe(1);
+      expect(Stories.getAllStories.mock.calls.length).toBe(1);
     });
   });
 
