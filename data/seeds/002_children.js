@@ -4,17 +4,17 @@ exports.seed = function (knex) {
     .then(function () {
       return knex('children').insert([
         {
-          parentId: '614025c94fec6d00682bf2a6',
+          parentId: 'auth0|618aee9bc49d5800691da3ee',
           name: 'Claire Marie',
           pin: 1234,
         },
         {
-          parentId: '614025c94mmm6d00682bf2a6',
+          parentId: 'auth0|618aee9bc49d5800691da3ee',
           name: 'Audrey Belle',
           pin: 1234,
         },
         {
-          parentId: '614025c94nnn6d00682bf2a6',
+          parentId: 'auth0|618aee9bc49d5800691da3ee',
           name: 'Marcus Aurelius',
           pin: 1234,
         },
