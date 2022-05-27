@@ -66,6 +66,9 @@ app.use('/stories', storiesRouter);
 app.use('/storyEpisodePrompts', storyEpisodePromptsRouter);
 app.use(['/submission', '/submissions'], childSubmissionsRouter);
 
+var sign_s3 = require('../config/s3Controller');
+app.use('/sign_s3', sign_s3.sign_s3);
+
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
