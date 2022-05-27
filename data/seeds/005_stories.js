@@ -2,20 +2,23 @@ const { faker } = require('@faker-js/faker');
 
 const stories = [
   {
+    id: 1,
     title: faker.lorem.sentence(),
-    description: faker.lorem.paragraph(),
+    description: faker.lorem.sentence(),
     author: faker.name.firstName(),
   },
 
   {
+    id: 2,
     title: faker.lorem.sentence(),
-    description: faker.lorem.paragraph(),
+    description: faker.lorem.sentence(),
     author: faker.name.firstName(),
   },
 
   {
+    id: 3,
     title: faker.lorem.sentence(),
-    description: faker.lorem.paragraph(),
+    description: faker.lorem.sentence(),
     author: faker.name.firstName(),
   },
 ];
