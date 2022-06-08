@@ -1,5 +1,6 @@
 const createError = require('http-errors');
 const express = require('express');
+const bodyParser = require('body-parser');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
@@ -65,6 +66,10 @@ app.use('/data', dsRouter);
 app.use('/stories', storiesRouter);
 app.use('/storyEpisodePrompts', storyEpisodePromptsRouter);
 app.use(['/submission', '/submissions'], childSubmissionsRouter);
+
+// Configured app to use bodyParser() in order to get data from a POST
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 var sign_s3 = require('../config/s3Controller');
 app.use('/sign_s3', sign_s3.sign_s3);
