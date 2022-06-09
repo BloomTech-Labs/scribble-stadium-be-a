@@ -59,6 +59,10 @@ app.use(authMiddleware.auth0Verify);
 // Find or create the profile if authenticated
 app.use(authMiddleware.authProfile);
 
+// Configured app to use bodyParser() in order to get data from a POST
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
 // application routes
 app.use('/', indexRouter);
 app.use(['/profile', '/profiles'], profileRouter);
@@ -67,12 +71,8 @@ app.use('/stories', storiesRouter);
 app.use('/storyEpisodePrompts', storyEpisodePromptsRouter);
 app.use(['/submission', '/submissions'], childSubmissionsRouter);
 
-// Configured app to use bodyParser() in order to get data from a POST
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-
-var sign_s3 = require('../config/s3Controller');
-app.use('/sign_s3', sign_s3.sign_s3);
+// const sign_s3 = require('./fileUpload/s3Router');
+// app.use('/sign_s3', sign_s3);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -88,7 +88,8 @@ app.use(function (err, req, res, next) {
       res.locals.error = err;
     }
   }
-  console.error(err);
+  console.error('ERROR', err);
+  console.log(typeof err);
   if (process.env.NODE_ENV === 'production' && !res.locals.message) {
     res.locals.message = 'ApplicationError';
     res.locals.status = 500;
