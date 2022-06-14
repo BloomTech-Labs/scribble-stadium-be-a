@@ -29,6 +29,8 @@ const childSubmissionsRouter = require('../api/childSubmissions/childSubmissions
 const storiesRouter = require('./stories/storiesRouter');
 const storyEpisodePromptsRouter = require('./storyEpisodePrompts/storyEpisodePromptsRouter');
 
+const s3Router = require('./fileUpload/s3Router');
+
 const app = express();
 
 process.on('unhandledRejection', (reason, p) => {
@@ -65,6 +67,7 @@ app.use('/data', dsRouter);
 app.use('/stories', storiesRouter);
 app.use('/storyEpisodePrompts', storyEpisodePromptsRouter);
 app.use(['/submission', '/submissions'], childSubmissionsRouter);
+app.use('/sign_s3', s3Router);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
