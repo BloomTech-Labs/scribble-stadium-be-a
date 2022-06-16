@@ -1,7 +1,7 @@
 const aws = require('aws-sdk');
 require('dotenv').config();
 
-// const router = require('express').Router();
+const router = require('express').Router();
 
 aws.config.update({
   region: 'us-east-1',
@@ -10,7 +10,7 @@ aws.config.update({
 });
 
 const S3_BUCKET = process.env.BUCKET;
-exports.sign_s3 = (req, res) => {
+router.get('/', (req, res) => {
   const s3 = new aws.S3(); // Create a new instance of S3
   const fileName = 'bikeImg.jpg'; // Set the file name to bikeImg.jpg to reference the img in a test bucket
   const fileType = req.body.fileType;
@@ -36,11 +36,6 @@ exports.sign_s3 = (req, res) => {
     // Send it all back
     res.json({ success: true, data: { returnData } });
   });
-};
+});
 
-// router.get('/', (req, res) => {
-//   console.log('sign_s3');
-//   res.json('success from s3 Router');
-// });
-
-// module.exports = router;
+module.exports = router;
