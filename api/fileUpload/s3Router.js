@@ -10,9 +10,9 @@ aws.config.update({
 });
 
 const S3_BUCKET = process.env.BUCKET;
-router.get('/', (req, res) => {
+router.post('/', (req, res) => {
   const s3 = new aws.S3(); // Create a new instance of S3
-  const fileName = 'bikeImg.jpg'; // Set the file name to bikeImg.jpg to reference the img in a test bucket
+  const fileName = req.body.fileName; // Set the file name to bikeImg.jpg to reference the img in a test bucket
   const fileType = req.body.fileType;
   // Set up the payload of what we are sending to the S3 api
   const s3Params = {
