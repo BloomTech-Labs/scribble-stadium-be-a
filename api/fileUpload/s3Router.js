@@ -1,3 +1,4 @@
+const { auth0Verify, authProfile } = require('../middleware/authProfile');
 const aws = require('aws-sdk');
 require('dotenv').config();
 
@@ -10,7 +11,7 @@ aws.config.update({
 });
 
 const S3_BUCKET = process.env.BUCKET;
-router.post('/', (req, res) => {
+router.post('/', auth0Verify, authProfile, (req, res) => {
   const s3 = new aws.S3(); // Create a new instance of S3
   const fileName = req.body.fileName; // Set the file name to bikeImg.jpg to reference the img in a test bucket
   const fileType = req.body.fileType;
