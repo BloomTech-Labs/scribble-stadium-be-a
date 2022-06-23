@@ -35,7 +35,7 @@ router.post('/', auth0Verify, authProfile, (req, res) => {
       url: `https://${S3_BUCKET}.s3.amazonaws.com/${fileName}`,
     };
     // Send it all back
-    res.json({ success: true, data: { returnData } });
+    res.json(returnData);
   });
 });
 
