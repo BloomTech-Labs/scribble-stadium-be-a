@@ -1,5 +1,6 @@
 const { auth0Verify, authProfile } = require('../middleware/authProfile');
 const aws = require('aws-sdk');
+const Submissions = require('./s3SubmissionsModel');
 require('dotenv').config();
 
 const router = require('express').Router();
@@ -37,6 +38,17 @@ router.post('/', auth0Verify, authProfile, (req, res) => {
     // Send it all back
     res.json(returnData);
   });
+});
+
+router.get('/', auth0Verify, authProfile, (req, res) => {
+  Submissions.getAllS3Submissions()
+    .then((submissions) => {
+      res.status(200).json(submissions);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ message: err.message });
+    });
 });
 
 module.exports = router;
