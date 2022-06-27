@@ -29,7 +29,7 @@ const childSubmissionsRouter = require('../api/childSubmissions/childSubmissions
 const storiesRouter = require('./stories/storiesRouter');
 const storyEpisodePromptsRouter = require('./storyEpisodePrompts/storyEpisodePromptsRouter');
 
-const s3Router = require('./fileUpload/s3Router');
+const s3Router = require('./fileUpload/s3SubmissionsRouter');
 
 const app = express();
 
