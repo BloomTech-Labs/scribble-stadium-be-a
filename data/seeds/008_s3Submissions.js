@@ -4,7 +4,6 @@ const s3Submissions = [
   {
     id: faker.datatype.number(),
     url: faker.internet.url(),
-    uploaded_at: faker.date.past(),
   },
 ];
 
