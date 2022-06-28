@@ -16,7 +16,8 @@
     "knex": "npx knex --knexfile config/knexfile.js",
     "tests": "npx jest",
     "coverage": "CI=true npx jest --coverage --detectOpenHandles --forceExit",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "update": "npx knex --knexfile config/knexfile.js migrate:rollback && npx knex --knexfile config/knexfile.js migrate:latest && npx knex --knexfile config/knexfile.js seed:run"
   },
   "lint-staged": {
     "api/**/*.js": [
