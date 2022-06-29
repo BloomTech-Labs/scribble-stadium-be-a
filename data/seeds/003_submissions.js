@@ -13,6 +13,13 @@ const submissions = [
     votedAt: faker.date.past(),
   },
   {
+    childId: 1,
+    storyId: 2,
+    episodeId: 2,
+    approvedAt: faker.date.past(),
+    episodeStartDate: faker.date.past(),
+  },
+  {
     childId: 2,
     storyId: 2,
     episodeId: 2,
@@ -22,6 +29,15 @@ const submissions = [
     finishedWritingAt: faker.date.past(),
     squadCreatedAt: faker.date.past(),
     votedAt: faker.date.past(),
+  },
+  {
+    childId: 2,
+    storyId: 2,
+    episodeId: 2,
+    approvedAt: faker.date.past(),
+    episodeStartDate: faker.date.past(),
+    finishedReadingAt: faker.date.past(),
+    finishedWritingAt: faker.date.past(),
   },
   {
     childId: 3,
@@ -45,7 +61,14 @@ const submissions = [
     squadCreatedAt: faker.date.past(),
     votedAt: faker.date.past(),
   },
-
+  {
+    childId: 4,
+    storyId: 2,
+    episodeId: 2,
+    approvedAt: faker.date.past(),
+    episodeStartDate: faker.date.past(),
+    finishedReadingAt: faker.date.past(),
+  },
   {
     childId: 5,
     storyId: 3,
@@ -56,6 +79,14 @@ const submissions = [
     finishedWritingAt: faker.date.past(),
     squadCreatedAt: faker.date.past(),
     votedAt: faker.date.past(),
+  },
+  {
+    childId: 5,
+    storyId: 3,
+    episodeId: 3,
+    approvedAt: faker.date.past(),
+    episodeStartDate: faker.date.past(),
+    finishedReadingAt: faker.date.past(),
   },
   {
     childId: 6,
@@ -91,6 +122,15 @@ const submissions = [
     votedAt: faker.date.past(),
   },
   {
+    childId: 8,
+    storyId: 3,
+    episodeId: 3,
+    approvedAt: faker.date.past(),
+    episodeStartDate: faker.date.past(),
+    finishedReadingAt: faker.date.past(),
+    finishedWritingAt: faker.date.past(),
+  },
+  {
     childId: 9,
     storyId: 3,
     episodeId: 3,
@@ -100,6 +140,14 @@ const submissions = [
     finishedWritingAt: faker.date.past(),
     squadCreatedAt: faker.date.past(),
     votedAt: faker.date.past(),
+  },
+  {
+    childId: 9,
+    storyId: 3,
+    episodeId: 3,
+    approvedAt: faker.date.past(),
+    episodeStartDate: faker.date.past(),
+    finishedReadingAt: faker.date.past(),
   },
 ];
 
