@@ -2,8 +2,17 @@ const router = require('express').Router();
 const { crudOperationsManager } = require('../lib/index');
 const childSubmissionsModel = require('./childSubmissionsModel.js');
 const { auth0Verify, authProfile } = require('../middleware/authProfile');
-const { checkAllRequiredFieldsExist } = require('./childSubmissionsMiddleware');
+// const { checkAllRequiredFieldsExist } = require('./childSubmissionsMiddleware');
+const aws = require('aws-sdk');
+const Submissions = require('../fileUpload/s3SubmissionsModel');
+const S3_BUCKET = process.env.BUCKET;
+require('dotenv').config();
 
+aws.config.update({
+  region: 'us-east-1',
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_KEY,
+});
 /**
  * @swagger
  *   components:
@@ -127,33 +136,90 @@ router.get('/:childId', auth0Verify, authProfile, (req, res) => {
  */
 
 //The FE needs to supply the storyId and episodeId in the req.body and the childId in the params
+// router.post(
+//   '/',
+//   auth0Verify,
+//   authProfile,
+//   checkAllRequiredFieldsExist,
+//   async (req, res) => {
+//     const newSubmission = req.body;
+
+//     crudOperationsManager.post(
+//       res,
+//       childSubmissionsModel.addSubmission,
+//       'Submission was not able to be added or was ',
+//       newSubmission
+//     );
+
+// childSubmissionsModel
+//   .addSubmission(newSubmission)
+//   .then((newSub) => {
+//     res.status(201).json(newSub);
+//   })
+//   .catch(() => {
+//     res
+//       .status(500)
+//       .json({ message: 'The new Submission could not be added to the DB' });
+//   });
+//   }
+// );
+
 router.post(
   '/',
   auth0Verify,
   authProfile,
-  checkAllRequiredFieldsExist,
+  // checkAllRequiredFieldsExist,
   async (req, res) => {
-    const newSubmission = req.body;
-
-    crudOperationsManager.post(
-      res,
-      childSubmissionsModel.addSubmission,
-      'Submission was not able to be added or was ',
-      newSubmission
-    );
-
-    // childSubmissionsModel
-    //   .addSubmission(newSubmission)
-    //   .then((newSub) => {
-    //     res.status(201).json(newSub);
-    //   })
-    //   .catch(() => {
-    //     res
-    //       .status(500)
-    //       .json({ message: 'The new Submission could not be added to the DB' });
-    //   });
+    // const newSubmission = req.body;
+    const s3 = new aws.S3(); // Create a new instance of S3
+    const fileName = req.body.fileName; // Set the file name to bikeImg.jpg to reference the img in a test bucket
+    const fileType = req.body.fileType;
+    const s3Params = {
+      Bucket: S3_BUCKET,
+      Key: fileName,
+      Expires: 500,
+      ContentType: fileType,
+      ACL: 'public-read',
+    };
+    // crudOperationsManager.post(
+    //   res,
+    //   childSubmissionsModel.addSubmission,
+    //   'Submission was not able to be added or was ',
+    //   newSubmission
+    // );
+    // Make a request to the S3 API to get a signed URL which we can use to upload our file
+    s3.getSignedUrl('putObject', s3Params, (err, data) => {
+      if (err) {
+        console.log(err);
+        res.json({ success: false, error: err });
+      }
+      // Data payload of what we are sending back, the url of the signedRequest and a URL where we can access the content after its saved.
+      const returnData = {
+        signedRequest: data,
+        url: `https://${S3_BUCKET}.s3.amazonaws.com/${fileName}`,
+      };
+      // Send it all back
+      res.json(returnData);
+    });
   }
 );
+
+router.get('/', auth0Verify, authProfile, (req, res) => {
+  Submissions.getAllS3Submissions()
+    .then((submissions) => {
+      res.status(200).json(submissions);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ message: err.message });
+    });
+});
+// crudOperationsManager.post(
+//   res,
+//   childSubmissionsModel.addSubmission,
+//   'Submission was not able to be added or was ',
+//   newSubmission
+// );
 
 /**
  * @swagger
