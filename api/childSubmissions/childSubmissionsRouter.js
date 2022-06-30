@@ -4,7 +4,8 @@ const childSubmissionsModel = require('./childSubmissionsModel.js');
 const { auth0Verify, authProfile } = require('../middleware/authProfile');
 // const { checkAllRequiredFieldsExist } = require('./childSubmissionsMiddleware');
 const aws = require('aws-sdk');
-const Submissions = require('../fileUpload/s3SubmissionsModel');
+const Submissions = require('../childSubmissions/childSubmissionsModel');
+
 const S3_BUCKET = process.env.BUCKET;
 require('dotenv').config();
 
@@ -181,12 +182,7 @@ router.post(
       ContentType: fileType,
       ACL: 'public-read',
     };
-    // crudOperationsManager.post(
-    //   res,
-    //   childSubmissionsModel.addSubmission,
-    //   'Submission was not able to be added or was ',
-    //   newSubmission
-    // );
+
     // Make a request to the S3 API to get a signed URL which we can use to upload our file
     s3.getSignedUrl('putObject', s3Params, (err, data) => {
       if (err) {
@@ -199,13 +195,27 @@ router.post(
         url: `https://${S3_BUCKET}.s3.amazonaws.com/${fileName}`,
       };
       // Send it all back
-      res.json(returnData);
+      // res.json(returnData);
+      crudOperationsManager.post(
+        res,
+        childSubmissionsModel.addS3Submission,
+        'Submission was not able to be added or was ',
+        {
+          id: 333,
+          submissionId: 3333,
+          type: 'SDD',
+          url: returnData.url,
+          pageNum: 33333,
+          created_at: '3333-05-30T02:13:39.618Z',
+          updated_at: '3333-05-30T02:13:39.618Z',
+        }
+      );
     });
   }
 );
 
 router.get('/', auth0Verify, authProfile, (req, res) => {
-  Submissions.getAllS3Submissions()
+  Submissions.getAllSubmissionPages()
     .then((submissions) => {
       res.status(200).json(submissions);
     })
@@ -214,6 +224,18 @@ router.get('/', auth0Verify, authProfile, (req, res) => {
       res.status(500).json({ message: err.message });
     });
 });
+
+// router.get('/', auth0Verify, authProfile, (req, res) => {
+//   Submissions.getAllSubmissions()
+//     .then((submissions) => {
+//       res.status(200).json(submissions);
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//       res.status(500).json({ message: err.message });
+//     });
+// });
+
 // crudOperationsManager.post(
 //   res,
 //   childSubmissionsModel.addSubmission,
