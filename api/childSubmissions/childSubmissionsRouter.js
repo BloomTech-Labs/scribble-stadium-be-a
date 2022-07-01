@@ -1,10 +1,10 @@
 const router = require('express').Router();
 const { crudOperationsManager } = require('../lib/index');
 const childSubmissionsModel = require('./childSubmissionsModel.js');
-const { auth0Verify, authProfile } = require('../middleware/authProfile');
-// const { checkAllRequiredFieldsExist } = require('./childSubmissionsMiddleware');
-const aws = require('aws-sdk');
 const Submissions = require('../childSubmissions/childSubmissionsModel');
+const { auth0Verify, authProfile } = require('../middleware/authProfile');
+const { checkAllRequiredFieldsExist } = require('./childSubmissionsMiddleware');
+const aws = require('aws-sdk');
 
 const S3_BUCKET = process.env.BUCKET;
 require('dotenv').config();
@@ -137,43 +137,59 @@ router.get('/:childId', auth0Verify, authProfile, (req, res) => {
  */
 
 //The FE needs to supply the storyId and episodeId in the req.body and the childId in the params
-// router.post(
-//   '/',
-//   auth0Verify,
-//   authProfile,
-//   checkAllRequiredFieldsExist,
-//   async (req, res) => {
-//     const newSubmission = req.body;
-
-//     crudOperationsManager.post(
-//       res,
-//       childSubmissionsModel.addSubmission,
-//       'Submission was not able to be added or was ',
-//       newSubmission
-//     );
-
-// childSubmissionsModel
-//   .addSubmission(newSubmission)
-//   .then((newSub) => {
-//     res.status(201).json(newSub);
-//   })
-//   .catch(() => {
-//     res
-//       .status(500)
-//       .json({ message: 'The new Submission could not be added to the DB' });
-//   });
-//   }
-// );
-
 router.post(
   '/',
+  auth0Verify,
+  authProfile,
+  checkAllRequiredFieldsExist,
+  async (req, res) => {
+    const newSubmission = req.body;
+
+    crudOperationsManager.post(
+      res,
+      childSubmissionsModel.addSubmission,
+      'Submission was not able to be added or was ',
+      newSubmission
+    );
+
+    childSubmissionsModel
+      .addSubmission(newSubmission)
+      .then((newSub) => {
+        res.status(201).json(newSub);
+      })
+      .catch(() => {
+        res
+          .status(500)
+          .json({ message: 'The new Submission could not be added to the DB' });
+      });
+  }
+);
+
+router.get('/', auth0Verify, authProfile, (req, res) => {
+  Submissions.getAllSubmissions()
+    .then((submissions) => {
+      res.status(200).json(submissions);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ message: err.message });
+    });
+});
+
+//
+//
+//Start of the AWS S3 code
+//
+//get AWS signed url for image upload to S3
+router.post(
+  '/s3',
   auth0Verify,
   authProfile,
   // checkAllRequiredFieldsExist,
   async (req, res) => {
     // const newSubmission = req.body;
     const s3 = new aws.S3(); // Create a new instance of S3
-    const fileName = req.body.fileName; // Set the file name to bikeImg.jpg to reference the img in a test bucket
+    const fileName = req.body.fileName.split(' ').join(''); // Set the file name to bikeImg.jpg to reference the img in a test bucket
     const fileType = req.body.fileType;
     const s3Params = {
       Bucket: S3_BUCKET,
@@ -195,40 +211,43 @@ router.post(
         url: `https://${S3_BUCKET}.s3.amazonaws.com/${fileName}`,
       };
       // Send it all back
-      // res.json(returnData);
-      crudOperationsManager.post(
-        res,
-        childSubmissionsModel.addS3Submission,
-        'Submission was not able to be added or was ',
-        {
-          id: 333,
-          submissionId: 3333,
-          type: 'SDD',
-          url: returnData.url,
-          pageNum: 33333,
-          created_at: '3333-05-30T02:13:39.618Z',
-          updated_at: '3333-05-30T02:13:39.618Z',
-        }
-      );
+      res.json(returnData);
     });
   }
 );
 
-router.get('/', auth0Verify, authProfile, (req, res) => {
-  Submissions.getAllSubmissionPages()
-    .then((submissions) => {
-      res.status(200).json(submissions);
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json({ message: err.message });
-    });
-});
+//imported faker to generate fake data for testing uploading submissionPage to DB
+const { faker } = require('@faker-js/faker');
 
+//save submissionPage with url
+router.post(
+  '/page',
+  auth0Verify,
+  authProfile,
+  // checkAllRequiredFieldsExist,
+  async (req, res) => {
+    crudOperationsManager.post(
+      res,
+      childSubmissionsModel.addS3Submission,
+      'Submission was not able to be added or was ',
+      {
+        id: faker.datatype.number(),
+        submissionId: faker.datatype.number(),
+        type: faker.random.word(),
+        url: req.body.url,
+        pageNum: faker.datatype.number(),
+      }
+    );
+  }
+);
+
+//router to get all submissionPages for testing purposes
+// commented out because it will only work while getAllSubmissions() is commented out
 // router.get('/', auth0Verify, authProfile, (req, res) => {
-//   Submissions.getAllSubmissions()
-//     .then((submissions) => {
-//       res.status(200).json(submissions);
+//   childSubmissionsModel
+//     .getAllSubmissionPages()
+//     .then((submissionPages) => {
+//       res.status(200).json(submissionPages);
 //     })
 //     .catch((err) => {
 //       console.log(err);
@@ -236,12 +255,8 @@ router.get('/', auth0Verify, authProfile, (req, res) => {
 //     });
 // });
 
-// crudOperationsManager.post(
-//   res,
-//   childSubmissionsModel.addSubmission,
-//   'Submission was not able to be added or was ',
-//   newSubmission
-// );
+//
+//End of AWS S3 code
 
 /**
  * @swagger
