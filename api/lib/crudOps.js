@@ -18,7 +18,7 @@ const getAll = async (res, query, name, ...args) => {
     }
     res.status(200).json(data);
   } catch (error) {
-    console.log(error, res, name, 'CRUD OPS ERROR, RES, NAME');
+    // console.log(error, res, name, 'CRUD OPS ERROR, RES, NAME');
     send(res, error, name);
   }
 };

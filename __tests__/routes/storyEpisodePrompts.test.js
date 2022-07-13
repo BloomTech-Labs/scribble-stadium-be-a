@@ -57,7 +57,7 @@ describe('storyEpisodePrompts router endpoints', () => {
     });
 
     it('should return 404 when no prompts are found', async () => {
-      Prompts.getEpisodePromptByEpisodeId.mockResolvedValue();
+      Prompts.getEpisodePromptByEpisodeId.mockResolvedValue([]);
       const res = await request(server).get('/storyEpisodePrompts/89');
       expect(res.status).toBe(404);
     });

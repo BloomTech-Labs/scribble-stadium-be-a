@@ -152,16 +152,16 @@ router.post(
       newSubmission
     );
 
-    childSubmissionsModel
-      .addSubmission(newSubmission)
-      .then((newSub) => {
-        res.status(201).json(newSub);
-      })
-      .catch(() => {
-        res
-          .status(500)
-          .json({ message: 'The new Submission could not be added to the DB' });
-      });
+    // childSubmissionsModel
+    //   .addSubmission(newSubmission)
+    //   .then((newSub) => {
+    //     res.status(201).json(newSub);
+    //   })
+    //   .catch(() => {
+    //     res
+    //       .status(500)
+    //       .json({ message: 'The new Submission could not be added to the DB' });
+    //   });
   }
 );
 
