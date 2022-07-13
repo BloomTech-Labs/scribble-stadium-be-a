@@ -23,8 +23,6 @@ async function updateSubmissionBySubmissionId(id, changes) {
 //rename to addSubmissionPage
 async function addS3Submission(submission) {
   return db('submissionPages').insert(submission).returning('*');
-  // const [newS3Img] = await db('s3').insert(imgUrl).returning('*');
-  // return newS3Img;
 }
 
 function getAllSubmissionPages() {

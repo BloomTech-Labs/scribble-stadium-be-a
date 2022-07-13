@@ -220,26 +220,20 @@ router.post(
 const { faker } = require('@faker-js/faker');
 
 //save submissionPage with url
-router.post(
-  '/page',
-  auth0Verify,
-  authProfile,
-  // checkAllRequiredFieldsExist,
-  async (req, res) => {
-    crudOperationsManager.post(
-      res,
-      childSubmissionsModel.addS3Submission,
-      'Submission was not able to be added or was ',
-      {
-        id: faker.datatype.number(),
-        submissionId: faker.datatype.number(),
-        type: faker.random.word(),
-        url: req.body.url,
-        pageNum: faker.datatype.number(),
-      }
-    );
-  }
-);
+router.post('/page', auth0Verify, authProfile, async (req, res) => {
+  crudOperationsManager.post(
+    res,
+    childSubmissionsModel.addS3Submission,
+    'Submission was not able to be added or was ',
+    {
+      id: faker.datatype.number(),
+      submissionId: faker.datatype.number(),
+      type: faker.random.word(),
+      url: req.body.url,
+      pageNum: faker.datatype.number(),
+    }
+  );
+});
 
 //router to get all submissionPages for testing purposes
 // commented out because it will only work while getAllSubmissions() is commented out
