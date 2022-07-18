@@ -1,9 +1,7 @@
 const db = require('../../data/db-config');
 
-async function addS3Submission(imgUrl) {
+async function addSubmissionPage(imgUrl) {
   return db('s3Submissions').insert(imgUrl).returning('*');
-  // const [newS3Img] = await db('s3').insert(imgUrl).returning('*');
-  // return newS3Img;
 }
 
 function getAllS3Submissions() {
@@ -15,7 +13,7 @@ function getS3Submission(id) {
 }
 
 module.exports = {
-  addS3Submission,
+  addSubmissionPage,
   getS3Submission,
   getAllS3Submissions,
 };

@@ -223,7 +223,7 @@ const { faker } = require('@faker-js/faker');
 router.post('/page', auth0Verify, authProfile, async (req, res) => {
   crudOperationsManager.post(
     res,
-    childSubmissionsModel.addS3Submission,
+    childSubmissionsModel.addSubmissionPage,
     'Submission was not able to be added or was ',
     {
       id: faker.datatype.number(),

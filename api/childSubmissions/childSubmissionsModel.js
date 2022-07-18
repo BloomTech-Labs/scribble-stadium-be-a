@@ -20,8 +20,7 @@ async function updateSubmissionBySubmissionId(id, changes) {
     .returning('*');
 }
 
-//rename to addSubmissionPage
-async function addS3Submission(submission) {
+async function addSubmissionPage(submission) {
   return db('submissionPages').insert(submission).returning('*');
 }
 
@@ -33,6 +32,6 @@ module.exports = {
   getSubmissionByChildId,
   addSubmission,
   updateSubmissionBySubmissionId,
-  addS3Submission,
+  addSubmissionPage,
   getAllSubmissionPages,
 };
