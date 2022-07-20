@@ -4,7 +4,7 @@ const childSubmissionsModel = require('./childSubmissionsModel.js');
 const Submissions = require('../childSubmissions/childSubmissionsModel');
 const { auth0Verify, authProfile } = require('../middleware/authProfile');
 const { checkAllRequiredFieldsExist } = require('./childSubmissionsMiddleware');
-const aws = require('aws-sdk');
+const { aws, s3UploadBucket } = require('../../config/aws');
 
 /**
  * @swagger
@@ -169,16 +169,6 @@ router.get('/', auth0Verify, authProfile, (req, res) => {
 });
 
 //Start of the AWS S3 code
-//
-const S3_BUCKET = process.env.BUCKET;
-require('dotenv').config();
-
-aws.config.update({
-  region: 'us-east-1',
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SECRET_KEY,
-});
-
 //get AWS signed url for image upload to S3
 router.post(
   '/s3',
@@ -191,7 +181,7 @@ router.post(
     const fileName = req.body.fileName.split(' ').join(''); // Set the file name to bikeImg.jpg to reference the img in a test bucket
     const fileType = req.body.fileType;
     const s3Params = {
-      Bucket: S3_BUCKET,
+      Bucket: s3UploadBucket,
       Key: fileName,
       Expires: 500,
       ContentType: fileType,
@@ -207,16 +197,13 @@ router.post(
       // Data payload of what we are sending back, the url of the signedRequest and a URL where we can access the content after its saved.
       const returnData = {
         signedRequest: data,
-        url: `https://${S3_BUCKET}.s3.amazonaws.com/${fileName}`,
+        url: `https://${s3UploadBucket}.s3.amazonaws.com/${fileName}`,
       };
       // Send it all back
       res.json(returnData);
     });
   }
 );
-
-//imported faker to generate fake data for testing uploading submissionPage to DB
-const { faker } = require('@faker-js/faker');
 
 //save submissionPage with url
 router.post('/page', auth0Verify, authProfile, async (req, res) => {
@@ -225,11 +212,10 @@ router.post('/page', auth0Verify, authProfile, async (req, res) => {
     childSubmissionsModel.addSubmissionPage,
     'Submission was not able to be added or was ',
     {
-      id: faker.datatype.number(),
-      submissionId: faker.datatype.number(),
-      type: faker.random.word(),
+      submissionId: req.body.submissionId,
+      type: req.body.type,
       url: req.body.url,
-      pageNum: faker.datatype.number(),
+      pageNum: req.body.pageNum,
     }
   );
 });
