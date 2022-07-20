@@ -6,14 +6,6 @@ const { auth0Verify, authProfile } = require('../middleware/authProfile');
 const { checkAllRequiredFieldsExist } = require('./childSubmissionsMiddleware');
 const aws = require('aws-sdk');
 
-const S3_BUCKET = process.env.BUCKET;
-require('dotenv').config();
-
-aws.config.update({
-  region: 'us-east-1',
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SECRET_KEY,
-});
 /**
  * @swagger
  *   components:
@@ -176,10 +168,17 @@ router.get('/', auth0Verify, authProfile, (req, res) => {
     });
 });
 
-//
-//
 //Start of the AWS S3 code
 //
+const S3_BUCKET = process.env.BUCKET;
+require('dotenv').config();
+
+aws.config.update({
+  region: 'us-east-1',
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_KEY,
+});
+
 //get AWS signed url for image upload to S3
 router.post(
   '/s3',
@@ -249,7 +248,6 @@ router.post('/page', auth0Verify, authProfile, async (req, res) => {
 //     });
 // });
 
-//
 //End of AWS S3 code
 
 /**
