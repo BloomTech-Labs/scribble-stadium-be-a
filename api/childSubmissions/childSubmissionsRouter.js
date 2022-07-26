@@ -168,7 +168,52 @@ router.get('/', auth0Verify, authProfile, (req, res) => {
     });
 });
 
-//Start of the AWS S3 code
+/**
+ * @swagger
+ * /s3:
+ *  post:
+ *    summary: Get AWS signed url for uploading a file to S3
+ *    security:
+ *      - okta: []
+ *    tags:
+ *      - submissions
+ *    requestBody:
+ *      description: File object to to be added with fileName and fileType
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            required:
+ *              - fileName
+ *              - fileType
+ *            properties:
+ *              fileName:
+ *                type: string
+ *              fileType:
+ *                type: string
+ *            example:
+ *                fileName: "test.png"
+ *                fileType: "image/png"
+ *    responses:
+ *      400:
+ *        $ref: '#/components/responses/BadRequest'
+ *      401:
+ *        $ref: '#/components/responses/UnauthorizedError'
+ *      200:
+ *        description: A signed request object with the url to upload the file to S3
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                signedUrl:
+ *                  type: string
+ *                url:
+ *                  type: string
+ *                example:
+ *                  signedUrl: 'https://bucketeer-0fcbcf8b-2b04-4ddb-ac9d-29c05b9d4990.s3.amazonaws.com/eaxmple?AWSAccessKeyId=AKIAX7CRDYXPW5WAYHMH&Content-Type=png&Expires=1658799315&Signature=VzaMA6zojoaIaII8AGZT7LN42cg%3D&x-amz-acl=public-read'
+ *                  url: 'https://bucketeer-0fcbcf8b-2b04-4ddb-ac9d-29c05b9d4990.s3.amazonaws.com/eaxmple'
+ */
 //get AWS signed url for image upload to S3
 router.post(
   '/s3',
