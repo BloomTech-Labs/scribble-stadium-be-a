@@ -220,22 +220,6 @@ router.post('/page', auth0Verify, authProfile, async (req, res) => {
   );
 });
 
-//router to get all submissionPages for testing purposes
-// commented out because it will only work while getAllSubmissions() is commented out
-// router.get('/', auth0Verify, authProfile, (req, res) => {
-//   childSubmissionsModel
-//     .getAllSubmissionPages()
-//     .then((submissionPages) => {
-//       res.status(200).json(submissionPages);
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//       res.status(500).json({ message: err.message });
-//     });
-// });
-
-//End of AWS S3 code
-
 /**
  * @swagger
  *  /submission/{id}:

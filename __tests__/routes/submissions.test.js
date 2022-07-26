@@ -60,7 +60,6 @@ describe('Testing childSubmissionRouter endpoints', () => {
         storyId: 2,
         episodeId: 1,
       };
-      // childSubmissionsModel.getSubmissionByChildId.mockResolvedValue(undefined);
       childSubmissionsModel.addSubmission.mockResolvedValue(mockSubmission);
       const res = await request(server)
         .post('/submissions')
