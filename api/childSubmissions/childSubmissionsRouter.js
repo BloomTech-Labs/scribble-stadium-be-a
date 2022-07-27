@@ -136,7 +136,6 @@ router.post(
   checkAllRequiredFieldsExist,
   async (req, res) => {
     const newSubmission = req.body;
-
     crudOperationsManager.post(
       res,
       childSubmissionsModel.addSubmission,
