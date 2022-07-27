@@ -176,7 +176,6 @@ router.post(
   authProfile,
   // checkAllRequiredFieldsExist,
   async (req, res) => {
-    // const newSubmission = req.body;
     const s3 = new aws.S3(); // Create a new instance of S3
     const fileName = req.body.fileName.split(' ').join(''); // Set the file name to bikeImg.jpg to reference the img in a test bucket
     const fileType = req.body.fileType;
