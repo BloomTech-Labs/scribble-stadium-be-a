@@ -191,7 +191,7 @@ router.get('/', auth0Verify, authProfile, (req, res) => {
  *              fileType:
  *                type: string
  *            example:
- *                fileName: "test.png"
+ *                fileName: "eaxmple.png"
  *                fileType: "image/png"
  *    responses:
  *      400:
