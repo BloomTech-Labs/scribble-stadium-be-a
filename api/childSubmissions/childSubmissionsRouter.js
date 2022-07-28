@@ -1,8 +1,10 @@
 const router = require('express').Router();
 const { crudOperationsManager } = require('../lib/index');
 const childSubmissionsModel = require('./childSubmissionsModel.js');
+const Submissions = require('../childSubmissions/childSubmissionsModel');
 const { auth0Verify, authProfile } = require('../middleware/authProfile');
 const { checkAllRequiredFieldsExist } = require('./childSubmissionsMiddleware');
+const { aws, s3UploadBucket } = require('../../config/aws');
 
 /**
  * @swagger
@@ -154,6 +156,68 @@ router.post(
     //   });
   }
 );
+
+router.get('/', auth0Verify, authProfile, (req, res) => {
+  Submissions.getAllSubmissions()
+    .then((submissions) => {
+      res.status(200).json(submissions);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ message: err.message });
+    });
+});
+
+//Start of the AWS S3 code
+//get AWS signed url for image upload to S3
+router.post(
+  '/s3',
+  auth0Verify,
+  authProfile,
+  // checkAllRequiredFieldsExist,
+  async (req, res) => {
+    const s3 = new aws.S3(); // Create a new instance of S3
+    const fileName = req.body.fileName.split(' ').join(''); // Set the file name to bikeImg.jpg to reference the img in a test bucket
+    const fileType = req.body.fileType;
+    const s3Params = {
+      Bucket: s3UploadBucket,
+      Key: fileName,
+      Expires: 500,
+      ContentType: fileType,
+      ACL: 'public-read',
+    };
+
+    // Make a request to the S3 API to get a signed URL which we can use to upload our file
+    s3.getSignedUrl('putObject', s3Params, (err, data) => {
+      if (err) {
+        console.log(err);
+        res.json({ success: false, error: err });
+      }
+      // Data payload of what we are sending back, the url of the signedRequest and a URL where we can access the content after its saved.
+      const returnData = {
+        signedRequest: data,
+        url: `https://${s3UploadBucket}.s3.amazonaws.com/${fileName}`,
+      };
+      // Send it all back
+      res.json(returnData);
+    });
+  }
+);
+
+//save submissionPage with url
+router.post('/page', auth0Verify, authProfile, async (req, res) => {
+  crudOperationsManager.post(
+    res,
+    childSubmissionsModel.addSubmissionPage,
+    'Submission was not able to be added or was ',
+    {
+      submissionId: req.body.submissionId,
+      type: req.body.type,
+      url: req.body.url,
+      pageNum: req.body.pageNum,
+    }
+  );
+});
 
 /**
  * @swagger

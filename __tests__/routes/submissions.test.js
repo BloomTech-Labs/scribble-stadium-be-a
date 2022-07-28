@@ -45,11 +45,11 @@ describe('Testing childSubmissionRouter endpoints', () => {
       ).toBe(1);
     });
 
-    it('should not return 200 when submission is not found', async () => {
-      childSubmissionsModel.getSubmissionByChildId.mockResolvedValue();
+    it('should return 404 when submission is not found', async () => {
+      childSubmissionsModel.getSubmissionByChildId.mockResolvedValue([]);
       const res = await request(server).get('/submissions/59782');
 
-      expect(res.status).not.toBe(200);
+      expect(res.status).toBe(404);
     });
   });
 
@@ -60,7 +60,6 @@ describe('Testing childSubmissionRouter endpoints', () => {
         storyId: 2,
         episodeId: 1,
       };
-      childSubmissionsModel.getSubmissionByChildId.mockResolvedValue(undefined);
       childSubmissionsModel.addSubmission.mockResolvedValue(mockSubmission);
       const res = await request(server)
         .post('/submissions')

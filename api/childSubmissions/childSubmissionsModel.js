@@ -20,9 +20,18 @@ async function updateSubmissionBySubmissionId(id, changes) {
     .returning('*');
 }
 
+async function addSubmissionPage(submission) {
+  return db('submissionPages').insert(submission).returning('*');
+}
+
+function getAllSubmissionPages() {
+  return db('submissionPages').select('*');
+}
 module.exports = {
   getAllSubmissions,
   getSubmissionByChildId,
   addSubmission,
   updateSubmissionBySubmissionId,
+  addSubmissionPage,
+  getAllSubmissionPages,
 };
