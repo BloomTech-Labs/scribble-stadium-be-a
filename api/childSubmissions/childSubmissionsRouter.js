@@ -42,12 +42,12 @@ const { aws, s3UploadBucket } = require('../../config/aws');
  *                 childId: 1
  *                 storyId: 1
  *                 episodeId: 1
- *                 "approvedAt": null,
+ *                 approvedAt: null
  *                 episodeStartDate: "2021-12-12T20:20:16.719Z"
  *                 finishedReadingAt: null
  *                 finishedWritingAt: null
  *                 squadCreatedAt: "2022-01-05T12:29:22.037Z"
- *                 votedAt: null,
+ *                 votedAt: null
  *                 createdAt: 2021-10-08 19:13:54.822+00
  *                 updatedAt: 2021-10-08 19:13:54.822+00
  */
@@ -136,7 +136,6 @@ router.post(
   checkAllRequiredFieldsExist,
   async (req, res) => {
     const newSubmission = req.body;
-
     crudOperationsManager.post(
       res,
       childSubmissionsModel.addSubmission,
@@ -168,7 +167,52 @@ router.get('/', auth0Verify, authProfile, (req, res) => {
     });
 });
 
-//Start of the AWS S3 code
+/**
+ * @swagger
+ * /s3:
+ *  post:
+ *    summary: Get AWS signed url for uploading a file to S3
+ *    security:
+ *      - okta: []
+ *    tags:
+ *      - submissions
+ *    requestBody:
+ *      description: File object to to be added with fileName and fileType
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            required:
+ *              - fileName
+ *              - fileType
+ *            properties:
+ *              fileName:
+ *                type: string
+ *              fileType:
+ *                type: string
+ *            example:
+ *                fileName: "eaxmple.png"
+ *                fileType: "image/png"
+ *    responses:
+ *      400:
+ *        $ref: '#/components/responses/BadRequest'
+ *      401:
+ *        $ref: '#/components/responses/UnauthorizedError'
+ *      200:
+ *        description: A signed request object with the url to upload the file to S3
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                signedUrl:
+ *                  type: string
+ *                url:
+ *                  type: string
+ *                example:
+ *                  signedUrl: 'https://bucketeer-0fcbcf8b-2b04-4ddb-ac9d-29c05b9d4990.s3.amazonaws.com/eaxmple?AWSAccessKeyId=AKIAX7CRDYXPW5WAYHMH&Content-Type=png&Expires=1658799315&Signature=VzaMA6zojoaIaII8AGZT7LN42cg%3D&x-amz-acl=public-read'
+ *                  url: 'https://bucketeer-0fcbcf8b-2b04-4ddb-ac9d-29c05b9d4990.s3.amazonaws.com/eaxmple'
+ */
 //get AWS signed url for image upload to S3
 router.post(
   '/s3',
@@ -186,7 +230,6 @@ router.post(
       ContentType: fileType,
       ACL: 'public-read',
     };
-
     // Make a request to the S3 API to get a signed URL which we can use to upload our file
     s3.getSignedUrl('putObject', s3Params, (err, data) => {
       if (err) {
@@ -203,8 +246,66 @@ router.post(
     });
   }
 );
+/**
+ * @swagger
+ * /page:
+ *  post:
+ *    summary: Save submission page
+ *    security:
+ *      - okta: []
+ *    tags:
+ *      - submissions
+ *    requestBody:
+ *      description: Submission page object with submissionId, type, url, and pageNum
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            required:
+ *              - submissionId
+ *              - type
+ *              - url
+ *              - pageNum
+ *            properties:
+ *              submissionId:
+ *                type: integer
+ *              type:
+ *                type: string
+ *              url:
+ *                type: string
+ *              pageNum:
+ *                type: integer
+ *            example:
+ *                submissionId: 2
+ *                type: "drawing"
+ *                url: "https://bucketeer-0fcbcf8b-2b04-4ddb-ac9d-29c05b9d4990.s3.amazonaws.com/example"
+ *                pageNum: 3
+ *    responses:
+ *      400:
+ *        $ref: '#/components/responses/BadRequest'
+ *      401:
+ *        $ref: '#/components/responses/UnauthorizedError'
+ *      200:
+ *        description: A signed request object with the url to upload the file to S3
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                signedUrl:
+ *                  type: string
+ *                url:
+ *                  type: string
+ *                example:
+ *                  id: 17
+ *                  submissionId: 2
+ *                  type: "drawing"
+ *                  url: "https://bucketeer-0fcbcf8b-2b04-4ddb-ac9d-29c05b9d4990.s3.amazonaws.com/example"
+ *                  pageNum: 3
+ *                  created_at: "2022-07-26T02:59:49.621Z"
+ *                  updated_at: "2022-07-26T02:59:49.621Z"
+ */
 
-//save submissionPage with url
 router.post('/page', auth0Verify, authProfile, async (req, res) => {
   crudOperationsManager.post(
     res,
