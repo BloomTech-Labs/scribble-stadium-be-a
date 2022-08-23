@@ -5,24 +5,19 @@ const squads = [
     teammateSubId: 2,
   },
   {
-    childId: 3,
+    childId: 2,
     subId: 2,
+    teammateSubId: 1,
+  },
+  {
+    childId: 3,
+    subId: 3,
     teammateSubId: 4,
   },
   {
-    childId: 6,
-    subId: 5,
-    teammateSubId: 5,
-  },
-  {
-    childId: 7,
-    subId: 7,
-    teammateSubId: 8,
-  },
-  {
-    childId: 9,
-    subId: 9,
-    teammateSubId: 10,
+    childId: 4,
+    subId: 4,
+    teammateSubId: 3,
   },
 ];
 
