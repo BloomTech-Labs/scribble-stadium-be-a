@@ -2,21 +2,21 @@ const matchups = [
   {
     greenSq1SubId: 1,
     greenSq2SubId: 3,
-    greenPageType: "writing",
+    greenPageType: 'writing',
     greenPoints: 60,
     redSq1SubId: 2,
     redSq2SubId: 4,
-    redPageType: "writing",
+    redPageType: 'writing',
     redPoints: 40,
     orangeSq1SubId: 1,
     orangeSq2SubId: 3,
-    orangePageType: "drawing",
+    orangePageType: 'drawing',
     orangePoints: 40,
     blueSq1SubId: 2,
     blueSq2SubId: 4,
-    bluePageType: "drawing",
+    bluePageType: 'drawing',
     bluePoints: 60,
-  }
+  },
 ];
 
 // episodeId, id, type, prompt
