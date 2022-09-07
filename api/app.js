@@ -25,9 +25,11 @@ const indexRouter = require('./index/indexRouter');
 const profileRouter = require('./profile/profileRouter');
 const dsRouter = require('./dsService/dsRouter');
 const childSubmissionsRouter = require('../api/childSubmissions/childSubmissionsRouter');
-
+const matchupsRouter = require('./matchups/matchupRouter');
 const storiesRouter = require('./stories/storiesRouter');
 const storyEpisodePromptsRouter = require('./storyEpisodePrompts/storyEpisodePromptsRouter');
+
+const squadsRouter = require('./squads/squadsRouter');
 
 const app = express();
 
@@ -65,6 +67,8 @@ app.use('/data', dsRouter);
 app.use('/stories', storiesRouter);
 app.use('/storyEpisodePrompts', storyEpisodePromptsRouter);
 app.use(['/submission', '/submissions'], childSubmissionsRouter);
+app.use(['/squad', '/squads'], squadsRouter);
+app.use(['/matchup', '/matchups'], matchupsRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -8,17 +8,17 @@ function getSquadsByChildId(childId) {
   return db('squads').where({ childId });
 }
 
-const addSquad = async (squad) => {
-  return db('squads').insert(squad).returning('*');
-};
-
 async function updateSquadBySquadId(id, changes) {
   return db('squads').where({ id: id }).first().update(changes).returning('*');
+}
+
+async function getSquadbySubId(subId) {
+  return db('squads').where({ subId });
 }
 
 module.exports = {
   getAllSquads,
   getSquadsByChildId,
-  addSquad,
   updateSquadBySquadId,
+  getSquadbySubId,
 };
