@@ -13,21 +13,21 @@ Table profiles {
 }
 
 Table children {
-  id uuid [primary key]
+  id number [primary key]
   parentId varchar [ref: > profiles.id]
   name varchar
   pin varchar
 }
 
 Table stories {
-  id uuid [primary key]
+  id number [primary key]
   title varchar
   description varchar
   author varchar
 }
 
 Table storyEpisodes {
-  id uuid [primary key]
+  id number [primary key]
   storyId varchar [ref: > stories.id]
   episodeNum numeric
   textImgUrl varchar
@@ -36,14 +36,14 @@ Table storyEpisodes {
 }
 
 Table storyEpisodePrompts {
-  id uuid [primary key]
+  id number [primary key]
   episdoeId varchar [ref: > storyEpisodes.id]
   type varchar // writing or drawing
   prompt varchar
 }
 
 Table submissions {
-  id uuid [primary key]
+  id number [primary key]
   childId varchar [ref: > children.id]
   storyId varchar [ref: > stories.id]
   episodeId varchar [ref: > storyEpisodes.id]
@@ -56,11 +56,43 @@ Table submissions {
 }
 
 Table submissionPages {
-  id uuid [primary key]
-  submissionId varchar [ref: > submissions.id]
+  id number [primary key]
+  submissionId number [ref: > submissions.id]
   type varchar // writing or drawing
   url varchar 
   pageNum numeric
   createdAt datetime
   updatedAt datetime
+}
+
+Table squads {
+  id number [primary key]
+  childId number [ref: > children.id]
+  subId number [ref: > submissions.id]
+  teammateSubId number [ref: > submissions.id]
+  myDrawPoints number
+  myWritePoints number
+  teammateDrawPoints number
+  teammateWritePoints number
+}
+
+Table matchups {
+  id number [primary key]
+  episodeDate datetime
+}
+
+Table matchupQuads {
+  id number [primary key]
+  matchupId number [primary key]
+  quad number //[1,2,3,4]
+  pageType string
+  totalPoints number
+  winnerSubId number
+}
+
+Table matchupQuadPlayers {
+  id number [primary key]
+  matchupId number [ref: > matchups.id]
+  matchupQuadId number [ref: > matchupQuads.id]
+  subId number [ref: > submissions.id]
 }
