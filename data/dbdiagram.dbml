@@ -46,6 +46,8 @@ Table submissions {
   id number [primary key]
   childId varchar [ref: > children.id]
   storyId varchar [ref: > stories.id]
+  squadId number [ref: > squads.id]
+  matchupId number [ref: > matchups.id]
   episodeId varchar [ref: > storyEpisodes.id]
   approvedAt datetime
   episodeStartDate datetime
@@ -83,7 +85,7 @@ Table matchups {
 
 Table matchupQuads {
   id number [primary key]
-  matchupId number [primary key]
+  matchupId number [ref: > matchups.id]
   quad number //[1,2,3,4]
   pageType string
   totalPoints number
