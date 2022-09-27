@@ -4,8 +4,8 @@ function getAllSquads() {
   return db('squads').orderBy('id');
 }
 
-function getSquadsByChildId(childId) {
-  return db('squads').where({ childId });
+function getSquadBySquadId(id) {
+  return db('squads').where({ id });
 }
 
 async function updateSquadBySquadId(id, changes) {
@@ -16,9 +16,14 @@ async function getSquadbySubId(subId) {
   return db('squads').where({ subId });
 }
 
+const addSquad = async (squad) => {
+  return db('squads').insert(squad).returning('*');
+};
+
 module.exports = {
   getAllSquads,
-  getSquadsByChildId,
+  getSquadBySquadId,
   updateSquadBySquadId,
   getSquadbySubId,
+  addSquad,
 };
