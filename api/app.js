@@ -25,11 +25,11 @@ const indexRouter = require('./index/indexRouter');
 const profileRouter = require('./profile/profileRouter');
 const dsRouter = require('./dsService/dsRouter');
 const childSubmissionsRouter = require('../api/childSubmissions/childSubmissionsRouter');
-const matchupsRouter = require('./matchups/matchupRouter');
 const storiesRouter = require('./stories/storiesRouter');
 const storyEpisodePromptsRouter = require('./storyEpisodePrompts/storyEpisodePromptsRouter');
 
 const squadsRouter = require('./squads/squadsRouter');
+const matchupsRouter = require('./matchups/matchupsRouter');
 
 const app = express();
 
