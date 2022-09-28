@@ -6,7 +6,7 @@ const squads = [
     myDrawPoints: 40,
     myWritePoints: 60,
     teammateDrawPoints: 60,
-    teammateWritePoints: 40
+    teammateWritePoints: 40,
   },
   {
     childId: 2,
@@ -15,7 +15,7 @@ const squads = [
     myDrawPoints: 60,
     myWritePoints: 40,
     teammateDrawPoints: 40,
-    teammateWritePoints: 60
+    teammateWritePoints: 60,
   },
   {
     childId: 3,
@@ -24,7 +24,7 @@ const squads = [
     myDrawPoints: 40,
     myWritePoints: 60,
     teammateDrawPoints: 60,
-    teammateWritePoints: 40
+    teammateWritePoints: 40,
   },
   {
     childId: 4,
@@ -33,8 +33,8 @@ const squads = [
     myDrawPoints: 60,
     myWritePoints: 40,
     teammateDrawPoints: 40,
-    teammateWritePoints: 60
-  }
+    teammateWritePoints: 60,
+  },
 ];
 
 exports.seed = function (knex) {

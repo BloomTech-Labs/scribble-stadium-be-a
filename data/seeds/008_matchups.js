@@ -3,7 +3,7 @@ const { faker } = require('@faker-js/faker');
 const matchups = [
   {
     episodeDate: faker.date.past(),
-  }
+  },
 ];
 
 exports.seed = function (knex) {

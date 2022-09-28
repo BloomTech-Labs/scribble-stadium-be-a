@@ -52,7 +52,7 @@ const submissions = [
     finishedWritingAt: faker.date.past(),
     squadCreatedAt: faker.date.past(),
     votedAt: faker.date.past(),
-  }
+  },
 ];
 
 exports.seed = function (knex) {

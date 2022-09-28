@@ -4,29 +4,29 @@ const matchupQuads = [
     quad: 1,
     pageType: 'writng',
     totalPoints: 200,
-    winnerSubId: 1
+    winnerSubId: 1,
   },
   {
     matchupId: 1,
     quad: 2,
     pageType: 'writng',
     totalPoints: 200,
-    winnerSubId: 2
+    winnerSubId: 2,
   },
   {
     matchupId: 1,
     quad: 3,
     pageType: 'drawing',
     totalPoints: 200,
-    winnerSubId: 3
+    winnerSubId: 3,
   },
   {
     matchupId: 1,
     quad: 4,
     pageType: 'drawing',
     totalPoints: 200,
-    winnerSubId: 4
-  }
+    winnerSubId: 4,
+  },
 ];
 
 exports.seed = function (knex) {
